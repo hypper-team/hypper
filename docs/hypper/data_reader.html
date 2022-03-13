@@ -37,22 +37,13 @@
                     <a class="function" href="#read_german_data">read_german_data</a>
             </li>
             <li>
-                    <a class="function" href="#read_abdominal_pain_data">read_abdominal_pain_data</a>
-            </li>
-            <li>
                     <a class="function" href="#read_breast_cancer_data">read_breast_cancer_data</a>
-            </li>
-            <li>
-                    <a class="function" href="#read_car_evaluation_data">read_car_evaluation_data</a>
             </li>
             <li>
                     <a class="function" href="#read_spect_heart">read_spect_heart</a>
             </li>
             <li>
                     <a class="function" href="#read_congressional_voting_records">read_congressional_voting_records</a>
-            </li>
-            <li>
-                    <a class="function" href="#read_criteo">read_criteo</a>
             </li>
             <li>
                     <a class="function" href="#read_banking">read_banking</a>
@@ -85,16 +76,28 @@
                 
                         <details>
             <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">import</span> <span class="nn">zipfile</span>
-<span class="kn">from</span> <span class="nn">pandas.core.frame</span> <span class="kn">import</span> <span class="n">DataFrame</span>
-
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">URLopener</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">DATAFILES_PREFIX</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;.hypper&#39;</span>
+
+<span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">DATAFILES_PREFIX</span> <span class="o">/</span> <span class="n">filepath</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">filepath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="c1"># Create directory</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">DATAFILES_PREFIX</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Download and unpack</span>
+        <span class="n">zipfile</span> <span class="o">=</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()))</span>
+        <span class="n">zipfile</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">DATAFILES_PREFIX</span><span class="p">))</span>
+    <span class="c1"># Read dataset</span>
+    <span class="k">return</span> <span class="n">filepath</span>
 
 <span class="k">def</span> <span class="nf">read_sample_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Loads custom sample dataset.</span>
@@ -113,19 +116,20 @@
 <span class="k">def</span> <span class="nf">read_german_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Loads `German Credit Data`.</span>
 <span class="sd">    </span>
-<span class="sd">    **Dataset**: https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)</span>
-<span class="sd">    **Download link**: https://www.kaggle.com/kabure/german-credit-data-with-risk/download</span>
+<span class="sd">    **Original Dataset**: https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)</span>
+
+<span class="sd">    **Modified Dataset**: https://www.kaggle.com/kabure/german-credit-data-with-risk/download</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/german/german_credit_data.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;german/german_credit_data.csv&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/german.zip&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># df.drop([&#39;Credit amount&#39;], axis=1, inplace=True) # Only for feature importance purposes</span>
-    <span class="n">categorical_cols</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s1">&#39;Sex&#39;</span><span class="p">,</span> <span class="s1">&#39;Job&#39;</span><span class="p">,</span> <span class="s1">&#39;Housing&#39;</span><span class="p">,</span> <span class="s1">&#39;Saving accounts&#39;</span><span class="p">,</span> <span class="s1">&#39;Checking account&#39;</span><span class="p">,</span> <span class="s1">&#39;Purpose&#39;</span><span class="p">]</span>
+    <span class="n">categorical_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Sex&#39;</span><span class="p">,</span> <span class="s1">&#39;Job&#39;</span><span class="p">,</span> <span class="s1">&#39;Housing&#39;</span><span class="p">,</span> <span class="s1">&#39;Saving accounts&#39;</span><span class="p">,</span> <span class="s1">&#39;Checking account&#39;</span><span class="p">,</span> <span class="s1">&#39;Purpose&#39;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;Risk&#39;</span><span class="p">,</span> <span class="n">categorical_cols</span>
 
-<span class="k">def</span> <span class="nf">read_abdominal_pain_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">_read_abdominal_pain_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Loads `Acute Inflammations Data Set`.</span>
 
 <span class="sd">    **Dataset**: https://archive.ics.uci.edu/ml/datasets/Acute+Inflammations</span>
@@ -167,7 +171,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/breast_cancer/breast-cancer.data&#39;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;breast_cancer/breast-cancer.data&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/breast_cancer.zip&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span>
         <span class="s1">&#39;label&#39;</span><span class="p">,</span>
         <span class="s1">&#39;age&#39;</span><span class="p">,</span>
         <span class="s1">&#39;menopause&#39;</span><span class="p">,</span>
@@ -179,7 +184,7 @@
         <span class="s1">&#39;breast_quad&#39;</span><span class="p">,</span>
         <span class="s1">&#39;irradiant&#39;</span><span class="p">]),</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;menopause&#39;</span><span class="p">,</span> <span class="s1">&#39;tumor_size&#39;</span><span class="p">,</span> <span class="s1">&#39;inv_nodes&#39;</span><span class="p">,</span> <span class="s1">&#39;node_caps&#39;</span><span class="p">,</span> <span class="s1">&#39;deg_maling&#39;</span><span class="p">,</span> <span class="s1">&#39;which_breast&#39;</span><span class="p">,</span> <span class="s1">&#39;breast_quad&#39;</span><span class="p">,</span> <span class="s1">&#39;irradiant&#39;</span><span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">read_car_evaluation_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">_read_car_evaluation_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Loads `Car Evaluation Data Set`.</span>
 
 <span class="sd">    **Dataset**: https://archive.ics.uci.edu/ml/datasets/car+evaluation</span>
@@ -207,8 +212,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">f_cols</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;F</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">23</span><span class="p">)]</span>
     <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;overall_diangnosis&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">f_cols</span>
-    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/spect_heart/SPECT.train&#39;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="p">)</span>
-    <span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/spect_heart/SPECT.test&#39;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;data/spect_heart&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/spect_heart.zip&#39;</span><span class="p">)</span>
+    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span> <span class="o">/</span> <span class="s1">&#39;SPECT.train&#39;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="p">)</span>
+    <span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span> <span class="o">/</span> <span class="s1">&#39;SPECT.test&#39;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s1">&#39;overall_diangnosis&#39;</span><span class="p">,</span> <span class="n">f_cols</span>
 
 <span class="k">def</span> <span class="nf">read_congressional_voting_records</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
@@ -219,7 +225,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/congressional_voting_records/house-votes-84.data&#39;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;congressional_voting_records/house-votes-84.data&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/congressional_voting_records.zip&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s1">&#39;class_name&#39;</span><span class="p">,</span>
         <span class="s1">&#39;handicapped_infants&#39;</span><span class="p">,</span>
         <span class="s1">&#39;water_project_cost_sharing&#39;</span><span class="p">,</span>
@@ -241,7 +248,7 @@
     <span class="c1"># Replace &#39;?&#39; with NaNs</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">),</span> <span class="s1">&#39;class_name&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="s1">&#39;class_name&#39;</span><span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">read_criteo</span><span class="p">(</span><span class="n">nrows</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">_read_criteo</span><span class="p">(</span><span class="n">nrows</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Loads `Criteo Sponsored Search Conversion Log Dataset`.</span>
 
 <span class="sd">    **Dataset**: https://ailab.criteo.com/criteo-sponsored-search-conversion-log-dataset/</span>
@@ -297,9 +304,11 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/banking_dataset/train.csv&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
-    <span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/banking_dataset/test.csv&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;job&#39;</span><span class="p">,</span> <span class="s1">&#39;marital&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="s1">&#39;housing&#39;</span><span class="p">,</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;banking_dataset&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/banking_dataset.zip&#39;</span><span class="p">)</span>
+    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span> <span class="o">/</span> <span class="s1">&#39;train.csv&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+    <span class="c1"># df_test = pd.read_csv(filepath / &#39;test.csv&#39;, delimiter=&#39;;&#39;)</span>
+    <span class="c1"># pd.concat([df_train, df_test], axis=0).reset_index(drop=True)</span>
+    <span class="k">return</span> <span class="n">df_train</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;job&#39;</span><span class="p">,</span> <span class="s1">&#39;marital&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="s1">&#39;housing&#39;</span><span class="p">,</span>
        <span class="s1">&#39;loan&#39;</span><span class="p">,</span> <span class="s1">&#39;contact&#39;</span><span class="p">,</span> <span class="s1">&#39;day&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;poutcome&#39;</span><span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">read_phishing</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
@@ -310,7 +319,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/phishing_websites/phishing.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;phishing_websites/phishing.csv&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/phishing_websites.zip&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;class_name&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="s1">&#39;class_name&#39;</span><span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">read_churn</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
@@ -321,7 +331,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/churn_modelling/Churn_Modelling.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;churn_modelling/Churn_Modelling.csv&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/churn_modelling.zip&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;CustomerId&#39;</span><span class="p">,</span> <span class="s1">&#39;Surname&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;Exited&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Geography&#39;</span><span class="p">,</span> <span class="s1">&#39;Gender&#39;</span><span class="p">,</span> <span class="s1">&#39;HasCrCard&#39;</span><span class="p">,</span> <span class="s1">&#39;IsActiveMember&#39;</span><span class="p">]</span>
 
@@ -333,7 +344,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/hr_analytics/aug_train.csv&#39;</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;hr_analytics/aug_train.csv&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/hr_analytics.zip&#39;</span><span class="p">)</span>
+    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
     <span class="n">df_train</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;enrollee_id&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df_train</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df_train</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="s1">&#39;target&#39;</span><span class="p">]</span>
 </pre></div>
@@ -392,16 +404,17 @@
             <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">read_german_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Loads `German Credit Data`.</span>
 <span class="sd">    </span>
-<span class="sd">    **Dataset**: https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)</span>
-<span class="sd">    **Download link**: https://www.kaggle.com/kabure/german-credit-data-with-risk/download</span>
+<span class="sd">    **Original Dataset**: https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)</span>
+
+<span class="sd">    **Modified Dataset**: https://www.kaggle.com/kabure/german-credit-data-with-risk/download</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/german/german_credit_data.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;german/german_credit_data.csv&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/german.zip&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># df.drop([&#39;Credit amount&#39;], axis=1, inplace=True) # Only for feature importance purposes</span>
-    <span class="n">categorical_cols</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s1">&#39;Sex&#39;</span><span class="p">,</span> <span class="s1">&#39;Job&#39;</span><span class="p">,</span> <span class="s1">&#39;Housing&#39;</span><span class="p">,</span> <span class="s1">&#39;Saving accounts&#39;</span><span class="p">,</span> <span class="s1">&#39;Checking account&#39;</span><span class="p">,</span> <span class="s1">&#39;Purpose&#39;</span><span class="p">]</span>
+    <span class="n">categorical_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Sex&#39;</span><span class="p">,</span> <span class="s1">&#39;Job&#39;</span><span class="p">,</span> <span class="s1">&#39;Housing&#39;</span><span class="p">,</span> <span class="s1">&#39;Saving accounts&#39;</span><span class="p">,</span> <span class="s1">&#39;Checking account&#39;</span><span class="p">,</span> <span class="s1">&#39;Purpose&#39;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;Risk&#39;</span><span class="p">,</span> <span class="n">categorical_cols</span>
 </pre></div>
 
@@ -409,68 +422,9 @@
 
             <div class="docstring"><p>Loads <code>German Credit Data</code>.</p>
 
-<p><strong>Dataset</strong>: https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)
-<strong>Download link</strong>: https://www.kaggle.com/kabure/german-credit-data-with-risk/download</p>
+<p><strong>Original Dataset</strong>: https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)</p>
 
-<h6 id="returns">Returns</h6>
-
-<blockquote>
-  <p>Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</p>
-</blockquote>
-</div>
-
-
-                </section>
-                <section id="read_abdominal_pain_data">
-                            <div class="attr function"><a class="headerlink" href="#read_abdominal_pain_data">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">read_abdominal_pain_data</span><span class="signature">() -&gt; Tuple[pandas.core.frame.DataFrame, str, list]</span>:
-    </div>
-
-            <details>
-            <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">read_abdominal_pain_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Loads `Acute Inflammations Data Set`.</span>
-
-<span class="sd">    **Dataset**: https://archive.ics.uci.edu/ml/datasets/Acute+Inflammations</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/abdominal_pain/diagnosis.data&#39;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span>
-        <span class="s1">&#39;patient_temperature&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;occurance_of_nausea&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;lumbar_pain&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;urine_pushing&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;mictorition_pain&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;burning_of_urethra&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;inflamation_of_urinary_bladder&#39;</span><span class="p">,</span> <span class="c1"># class 1</span>
-        <span class="s1">&#39;nephritis_of_renal_pelvis_origin&#39;</span> <span class="c1"># class 2</span>
-    <span class="p">])</span>
-    <span class="c1"># Combining 2 classes in single column</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;inflamation_of_urinary_bladder&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;nephritis_of_renal_pelvis_origin&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;inflamation_of_urinary_bladder&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;nephritis_of_renal_pelvis_origin&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;no&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;inflamation_of_urinary_bladder&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;no&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;nephritis_of_renal_pelvis_origin&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span>
-        <span class="p">],</span>
-        <span class="p">[</span>
-            <span class="s1">&#39;both_diseases&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;inflamation_of_urinary_bladder&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;nephritis_of_renal_pelvis_origin&#39;</span><span class="p">,</span>
-        <span class="p">],</span> <span class="n">default</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;inflamation_of_urinary_bladder&#39;</span><span class="p">,</span> <span class="s1">&#39;nephritis_of_renal_pelvis_origin&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="s1">&#39;label&#39;</span><span class="p">]</span>
-</pre></div>
-
-        </details>
-
-            <div class="docstring"><p>Loads <code>Acute Inflammations Data Set</code>.</p>
-
-<p><strong>Dataset</strong>: https://archive.ics.uci.edu/ml/datasets/Acute+Inflammations</p>
+<p><strong>Modified Dataset</strong>: https://www.kaggle.com/kabure/german-credit-data-with-risk/download</p>
 
 <h6 id="returns">Returns</h6>
 
@@ -499,7 +453,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/breast_cancer/breast-cancer.data&#39;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;breast_cancer/breast-cancer.data&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/breast_cancer.zip&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span>
         <span class="s1">&#39;label&#39;</span><span class="p">,</span>
         <span class="s1">&#39;age&#39;</span><span class="p">,</span>
         <span class="s1">&#39;menopause&#39;</span><span class="p">,</span>
@@ -517,50 +472,6 @@
             <div class="docstring"><p>Loads <code>Breast Cancer Data Set</code>.</p>
 
 <p><strong>Dataset</strong>: https://archive.ics.uci.edu/ml/datasets/breast+cancer</p>
-
-<h6 id="returns">Returns</h6>
-
-<blockquote>
-  <p>Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</p>
-</blockquote>
-</div>
-
-
-                </section>
-                <section id="read_car_evaluation_data">
-                            <div class="attr function"><a class="headerlink" href="#read_car_evaluation_data">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">read_car_evaluation_data</span><span class="signature">() -&gt; Tuple[pandas.core.frame.DataFrame, str, list]</span>:
-    </div>
-
-            <details>
-            <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">read_car_evaluation_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Loads `Car Evaluation Data Set`.</span>
-
-<span class="sd">    **Dataset**: https://archive.ics.uci.edu/ml/datasets/car+evaluation</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/car_evaluation/car.data&#39;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span>
-        <span class="s1">&#39;buying_price&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;maintenance_cost&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;num_of_doors&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;people_capacity&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;lug_boot_size&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;safety&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;label&#39;</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="s1">&#39;label&#39;</span><span class="p">]</span>
-</pre></div>
-
-        </details>
-
-            <div class="docstring"><p>Loads <code>Car Evaluation Data Set</code>.</p>
-
-<p><strong>Dataset</strong>: https://archive.ics.uci.edu/ml/datasets/car+evaluation</p>
 
 <h6 id="returns">Returns</h6>
 
@@ -591,8 +502,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">f_cols</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;F</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">23</span><span class="p">)]</span>
     <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;overall_diangnosis&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">f_cols</span>
-    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/spect_heart/SPECT.train&#39;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="p">)</span>
-    <span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/spect_heart/SPECT.test&#39;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;data/spect_heart&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/spect_heart.zip&#39;</span><span class="p">)</span>
+    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span> <span class="o">/</span> <span class="s1">&#39;SPECT.train&#39;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="p">)</span>
+    <span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span> <span class="o">/</span> <span class="s1">&#39;SPECT.test&#39;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s1">&#39;overall_diangnosis&#39;</span><span class="p">,</span> <span class="n">f_cols</span>
 </pre></div>
 
@@ -629,7 +541,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/congressional_voting_records/house-votes-84.data&#39;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;congressional_voting_records/house-votes-84.data&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/congressional_voting_records.zip&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s1">&#39;class_name&#39;</span><span class="p">,</span>
         <span class="s1">&#39;handicapped_infants&#39;</span><span class="p">,</span>
         <span class="s1">&#39;water_project_cost_sharing&#39;</span><span class="p">,</span>
@@ -667,83 +580,6 @@
 
 
                 </section>
-                <section id="read_criteo">
-                            <div class="attr function"><a class="headerlink" href="#read_criteo">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">read_criteo</span><span class="signature">(
-    nrows=1000000,
-    size=0.1
-) -&gt; Tuple[pandas.core.frame.DataFrame, str, list]</span>:
-    </div>
-
-            <details>
-            <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">read_criteo</span><span class="p">(</span><span class="n">nrows</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Loads `Criteo Sponsored Search Conversion Log Dataset`.</span>
-
-<span class="sd">    **Dataset**: https://ailab.criteo.com/criteo-sponsored-search-conversion-log-dataset/</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/criteo/CriteoSearchData&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s1">&#39;Sale&#39;</span> <span class="p">,</span><span class="s1">&#39;SalesAmountInEuro&#39;</span> <span class="p">,</span><span class="s1">&#39;time_delay_for_conversion&#39;</span><span class="p">,</span> <span class="s1">&#39;click_timestamp&#39;</span><span class="p">,</span>\
-        <span class="s1">&#39;nb_clicks_1week&#39;</span> <span class="p">,</span><span class="s1">&#39;product_price&#39;</span> <span class="p">,</span><span class="s1">&#39;product_age_group&#39;</span> <span class="p">,</span><span class="s1">&#39;device_type&#39;</span><span class="p">,</span>\
-        <span class="s1">&#39;audience_id&#39;</span> <span class="p">,</span><span class="s1">&#39;product_gender&#39;</span> <span class="p">,</span><span class="s1">&#39;product_brand&#39;</span> <span class="p">,</span><span class="s1">&#39;product_category_1&#39;</span><span class="p">,</span>\
-        <span class="s1">&#39;product_category_2&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_3&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_4&#39;</span><span class="p">,</span> \
-        <span class="s1">&#39;product_category_5&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_6&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_7&#39;</span><span class="p">,</span> 
-        <span class="s1">&#39;product_country&#39;</span><span class="p">,</span> <span class="s1">&#39;product_id&#39;</span> <span class="p">,</span><span class="s1">&#39;product_title&#39;</span> <span class="p">,</span><span class="s1">&#39;partner_id&#39;</span> <span class="p">,</span><span class="s1">&#39;user_id&#39;</span>
-    <span class="p">],</span>
-    <span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span>
-    <span class="c1"># usecols=[&#39;Sale&#39;, &#39;click_timestamp&#39;,\</span>
-    <span class="c1">#     &#39;nb_clicks_1week&#39;,&#39;product_age_group&#39; ,&#39;device_type&#39;,\</span>
-    <span class="c1">#     &#39;audience_id&#39; ,&#39;product_gender&#39; ,&#39;product_brand&#39; ,&#39;product_category_1&#39;,\</span>
-    <span class="c1">#     &#39;product_category_2&#39;, &#39;product_category_3&#39;, &#39;product_category_4&#39;, \</span>
-    <span class="c1">#     &#39;product_category_5&#39;, &#39;product_category_6&#39;, &#39;product_category_7&#39;, </span>
-    <span class="c1">#     &#39;product_country&#39;, &#39;product_id&#39; ,&#39;product_title&#39; ,&#39;partner_id&#39; ,&#39;user_id&#39;],</span>
-    <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Sale&#39;</span><span class="p">,</span> \
-        <span class="s1">&#39;nb_clicks_1week&#39;</span><span class="p">,</span> <span class="s1">&#39;product_age_group&#39;</span> <span class="p">,</span><span class="s1">&#39;device_type&#39;</span><span class="p">,</span>\
-        <span class="s1">&#39;audience_id&#39;</span> <span class="p">,</span><span class="s1">&#39;product_gender&#39;</span> <span class="p">,</span><span class="s1">&#39;product_brand&#39;</span> <span class="p">,</span><span class="s1">&#39;product_category_1&#39;</span><span class="p">,</span>\
-        <span class="s1">&#39;product_category_2&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_3&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_4&#39;</span><span class="p">,</span> \
-        <span class="s1">&#39;product_category_5&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_6&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_7&#39;</span><span class="p">,</span> 
-        <span class="s1">&#39;product_country&#39;</span><span class="p">,</span> <span class="s1">&#39;product_id&#39;</span> <span class="p">,</span><span class="s1">&#39;partner_id&#39;</span><span class="p">],</span>
-    <span class="n">dtype</span><span class="o">=</span><span class="p">{</span>
-        <span class="s1">&#39;Sale&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">,</span> <span class="s1">&#39;click_timestamp&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>\
-        <span class="s1">&#39;nb_clicks_1week&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span> <span class="s1">&#39;product_age_group&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="s1">&#39;device_type&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span>\
-        <span class="s1">&#39;audience_id&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span><span class="s1">&#39;product_gender&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span><span class="s1">&#39;product_brand&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span><span class="s1">&#39;product_category_1&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span>\
-        <span class="s1">&#39;product_category_2&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_3&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_4&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span> \
-        <span class="s1">&#39;product_category_5&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_6&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_7&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span> 
-        <span class="s1">&#39;product_country&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="s1">&#39;product_id&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="s1">&#39;product_title&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="s1">&#39;partner_id&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span>
-    <span class="p">}</span>
-    <span class="p">)</span>
-    <span class="c1"># df.drop([&#39;SalesAmountInEuro&#39; ,&#39;time_delay_for_conversion&#39;, &#39;product_price&#39;], axis=1, inplace=True)# removing other labels</span>
-    <span class="c1"># return df, &#39;Sale&#39;</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;Sale&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Sale&#39;</span><span class="p">],</span> <span class="n">test_size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Sale&#39;</span><span class="p">])</span>
-    <span class="n">X</span><span class="p">[</span><span class="s1">&#39;Sale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
-    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="s1">&#39;Sale&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;product_age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;device_type&#39;</span><span class="p">,</span> <span class="s1">&#39;audience_id&#39;</span><span class="p">,</span>
-       <span class="s1">&#39;product_gender&#39;</span><span class="p">,</span> <span class="s1">&#39;product_brand&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_1&#39;</span><span class="p">,</span>
-       <span class="s1">&#39;product_category_2&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_3&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_4&#39;</span><span class="p">,</span>
-       <span class="s1">&#39;product_category_5&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_6&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_7&#39;</span><span class="p">,</span>
-       <span class="s1">&#39;product_country&#39;</span><span class="p">,</span> <span class="s1">&#39;product_id&#39;</span><span class="p">,</span> <span class="s1">&#39;partner_id&#39;</span><span class="p">]</span>
-</pre></div>
-
-        </details>
-
-            <div class="docstring"><p>Loads <code>Criteo Sponsored Search Conversion Log Dataset</code>.</p>
-
-<p><strong>Dataset</strong>: https://ailab.criteo.com/criteo-sponsored-search-conversion-log-dataset/</p>
-
-<h6 id="returns">Returns</h6>
-
-<blockquote>
-  <p>Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</p>
-</blockquote>
-</div>
-
-
-                </section>
                 <section id="read_banking">
                             <div class="attr function"><a class="headerlink" href="#read_banking">#&nbsp;&nbsp</a>
 
@@ -762,9 +598,11 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/banking_dataset/train.csv&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
-    <span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/banking_dataset/test.csv&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;job&#39;</span><span class="p">,</span> <span class="s1">&#39;marital&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="s1">&#39;housing&#39;</span><span class="p">,</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;banking_dataset&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/banking_dataset.zip&#39;</span><span class="p">)</span>
+    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span> <span class="o">/</span> <span class="s1">&#39;train.csv&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+    <span class="c1"># df_test = pd.read_csv(filepath / &#39;test.csv&#39;, delimiter=&#39;;&#39;)</span>
+    <span class="c1"># pd.concat([df_train, df_test], axis=0).reset_index(drop=True)</span>
+    <span class="k">return</span> <span class="n">df_train</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;job&#39;</span><span class="p">,</span> <span class="s1">&#39;marital&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="s1">&#39;housing&#39;</span><span class="p">,</span>
        <span class="s1">&#39;loan&#39;</span><span class="p">,</span> <span class="s1">&#39;contact&#39;</span><span class="p">,</span> <span class="s1">&#39;day&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;poutcome&#39;</span><span class="p">]</span>
 </pre></div>
 
@@ -801,7 +639,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/phishing_websites/phishing.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;phishing_websites/phishing.csv&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/phishing_websites.zip&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;class_name&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="s1">&#39;class_name&#39;</span><span class="p">]</span>
 </pre></div>
 
@@ -838,7 +677,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/churn_modelling/Churn_Modelling.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;churn_modelling/Churn_Modelling.csv&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/churn_modelling.zip&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;CustomerId&#39;</span><span class="p">,</span> <span class="s1">&#39;Surname&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;Exited&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Geography&#39;</span><span class="p">,</span> <span class="s1">&#39;Gender&#39;</span><span class="p">,</span> <span class="s1">&#39;HasCrCard&#39;</span><span class="p">,</span> <span class="s1">&#39;IsActiveMember&#39;</span><span class="p">]</span>
 </pre></div>
@@ -876,7 +716,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/hr_analytics/aug_train.csv&#39;</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">_download_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;hr_analytics/aug_train.csv&#39;</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/hypper-team/hypper/raw/main/data/hr_analytics.zip&#39;</span><span class="p">)</span>
+    <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
     <span class="n">df_train</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;enrollee_id&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df_train</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df_train</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="s1">&#39;target&#39;</span><span class="p">]</span>
 </pre></div>
