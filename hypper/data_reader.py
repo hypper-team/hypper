@@ -1,26 +1,25 @@
-import os
-import tempfile
-import zipfile
+import io
 from pathlib import Path
 from typing import Tuple
-from urllib.request import URLopener
+from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
-from pandas.core.frame import DataFrame
+from urllib.request import urlopen
 from sklearn.model_selection import train_test_split
 
-DATAFILES_PREFIX = '~/.hypper/'
+DATAFILES_PREFIX = Path.home() / '.hypper'
 
-def save_file(df: pd.DataFrame, filepath: str) -> None:
-    pass
-
-def file_exist(filepath: str) -> bool:
-    return os.path.isfile(filepath)
-
-def read_file(filepath: str) -> pd.DataFrame:
-    pass
-
+def _download_file(filepath, url):
+    filepath = Path(DATAFILES_PREFIX / filepath)
+    if not filepath.exists():
+        # Create directory
+        Path(DATAFILES_PREFIX).mkdir(parents=True, exist_ok=True)
+        # Download and unpack
+        zipfile = ZipFile(io.BytesIO(urlopen(url).read()))
+        zipfile.extractall(path=Path(DATAFILES_PREFIX))
+    # Read dataset
+    return filepath
 
 def read_sample_data() -> Tuple[pd.DataFrame, str, list]:
     """Loads custom sample dataset.
@@ -37,27 +36,22 @@ def read_sample_data() -> Tuple[pd.DataFrame, str, list]:
     return pd.DataFrame.from_dict(DF_TEST_STRUCTURE).set_index('index'), 'y', ['x1', 'x2']
 
 def read_german_data() -> Tuple[pd.DataFrame, str, list]:
-    # """Loads `German Credit Data`.
+    """Loads `German Credit Data`.
     
-    # **Dataset**: https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)
-    # **Download link**: https://www.kaggle.com/kabure/german-credit-data-with-risk/download
+    **Original Dataset**: https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)
 
-    # Returns:
-    #     Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.
-    # """
-    # df = pd.read_csv('data/german/german_credit_data.csv', index_col=0)
-    # # df.drop(['Credit amount'], axis=1, inplace=True) # Only for feature importance purposes
-    # categorical_cols = [
-    #     'Sex', 'Job', 'Housing', 'Saving accounts', 'Checking account', 'Purpose']
-    # return df, 'Risk', categorical_cols
-    filepath = os.path.expanduser(DATAFILES_PREFIX+"german_credit_data.csv")
-    if file_exist(filepath):
-        df = pd.read_csv('data/german/german_credit_data.csv', index_col=0)
-    print()
+    **Modified Dataset**: https://www.kaggle.com/kabure/german-credit-data-with-risk/download
 
-read_german_data()
+    Returns:
+        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.
+    """
+    filepath = _download_file(filepath = 'german/german_credit_data.csv', url = 'https://github.com/hypper-team/hypper/raw/main/data/german.zip')
+    df = pd.read_csv(filepath, index_col=0)
+    # df.drop(['Credit amount'], axis=1, inplace=True) # Only for feature importance purposes
+    categorical_cols = ['Sex', 'Job', 'Housing', 'Saving accounts', 'Checking account', 'Purpose']
+    return df, 'Risk', categorical_cols
 
-def read_abdominal_pain_data() -> Tuple[pd.DataFrame, str, list]:
+def _read_abdominal_pain_data() -> Tuple[pd.DataFrame, str, list]:
     """Loads `Acute Inflammations Data Set`.
 
     **Dataset**: https://archive.ics.uci.edu/ml/datasets/Acute+Inflammations
@@ -99,7 +93,8 @@ def read_breast_cancer_data() -> Tuple[pd.DataFrame, str, list]:
     Returns:
         Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.
     """
-    return pd.read_csv('data/breast_cancer/breast-cancer.data', names=[
+    filepath = _download_file(filepath = 'breast_cancer/breast-cancer.data', url = 'https://github.com/hypper-team/hypper/raw/main/data/breast_cancer.zip')
+    return pd.read_csv(filepath, names=[
         'label',
         'age',
         'menopause',
@@ -111,7 +106,7 @@ def read_breast_cancer_data() -> Tuple[pd.DataFrame, str, list]:
         'breast_quad',
         'irradiant']), 'label', ['age', 'menopause', 'tumor_size', 'inv_nodes', 'node_caps', 'deg_maling', 'which_breast', 'breast_quad', 'irradiant']
 
-def read_car_evaluation_data() -> Tuple[pd.DataFrame, str, list]:
+def _read_car_evaluation_data() -> Tuple[pd.DataFrame, str, list]:
     """Loads `Car Evaluation Data Set`.
 
     **Dataset**: https://archive.ics.uci.edu/ml/datasets/car+evaluation
@@ -139,8 +134,9 @@ def read_spect_heart() -> Tuple[pd.DataFrame, str, list]:
     """
     f_cols = [f'F{i}' for i in range(1, 23)]
     names = ['overall_diangnosis'] + f_cols
-    df_train = pd.read_csv('data/spect_heart/SPECT.train', names = names)
-    df_test = pd.read_csv('data/spect_heart/SPECT.test', names = names)
+    filepath = _download_file(filepath = 'data/spect_heart', url = 'https://github.com/hypper-team/hypper/raw/main/data/spect_heart.zip')
+    df_train = pd.read_csv(filepath / 'SPECT.train', names = names)
+    df_test = pd.read_csv(filepath / 'SPECT.test', names = names)
     return pd.concat([df_train, df_test], ignore_index=True), 'overall_diangnosis', f_cols
 
 def read_congressional_voting_records() -> Tuple[pd.DataFrame, str, list]:
@@ -151,7 +147,8 @@ def read_congressional_voting_records() -> Tuple[pd.DataFrame, str, list]:
     Returns:
         Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.
     """
-    df = pd.read_csv('data/congressional_voting_records/house-votes-84.data', names = [
+    filepath = _download_file(filepath = 'congressional_voting_records/house-votes-84.data', url = 'https://github.com/hypper-team/hypper/raw/main/data/congressional_voting_records.zip')
+    df = pd.read_csv(filepath, names = [
         'class_name',
         'handicapped_infants',
         'water_project_cost_sharing',
@@ -173,7 +170,7 @@ def read_congressional_voting_records() -> Tuple[pd.DataFrame, str, list]:
     # Replace '?' with NaNs
     return df.replace('?', np.nan), 'class_name', [i for i in df.columns if i != 'class_name']
 
-def read_criteo(nrows = 1000000, size = 0.1) -> Tuple[pd.DataFrame, str, list]:
+def _read_criteo(nrows = 1000000, size = 0.1) -> Tuple[pd.DataFrame, str, list]:
     """Loads `Criteo Sponsored Search Conversion Log Dataset`.
 
     **Dataset**: https://ailab.criteo.com/criteo-sponsored-search-conversion-log-dataset/
@@ -229,9 +226,11 @@ def read_banking() -> Tuple[pd.DataFrame, str, list]:
     Returns:
         Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.
     """
-    df_train = pd.read_csv('data/banking_dataset/train.csv', delimiter=';')
-    df_test = pd.read_csv('data/banking_dataset/test.csv', delimiter=';')
-    return pd.concat([df_train, df_test], axis=0).reset_index(drop=True), 'y', ['job', 'marital', 'education', 'default', 'housing',
+    filepath = _download_file(filepath = 'banking_dataset', url = 'https://github.com/hypper-team/hypper/raw/main/data/banking_dataset.zip')
+    df_train = pd.read_csv(filepath / 'train.csv', delimiter=';')
+    # df_test = pd.read_csv(filepath / 'test.csv', delimiter=';')
+    # pd.concat([df_train, df_test], axis=0).reset_index(drop=True)
+    return df_train, 'y', ['job', 'marital', 'education', 'default', 'housing',
        'loan', 'contact', 'day', 'month', 'poutcome']
 
 def read_phishing() -> Tuple[pd.DataFrame, str, list]:
@@ -242,7 +241,8 @@ def read_phishing() -> Tuple[pd.DataFrame, str, list]:
     Returns:
         Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.
     """
-    df = pd.read_csv('data/phishing_websites/phishing.csv', index_col=0)
+    filepath = _download_file(filepath = 'phishing_websites/phishing.csv', url = 'https://github.com/hypper-team/hypper/raw/main/data/phishing_websites.zip')
+    df = pd.read_csv(filepath, index_col=0)
     return df, 'class_name', [i for i in df.columns if i != 'class_name']
 
 def read_churn() -> Tuple[pd.DataFrame, str, list]:
@@ -253,7 +253,8 @@ def read_churn() -> Tuple[pd.DataFrame, str, list]:
     Returns:
         Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.
     """
-    df = pd.read_csv('data/churn_modelling/Churn_Modelling.csv', index_col=0)
+    filepath = _download_file(filepath = 'churn_modelling/Churn_Modelling.csv', url = 'https://github.com/hypper-team/hypper/raw/main/data/churn_modelling.zip')
+    df = pd.read_csv(filepath, index_col=0)
     df.drop(['CustomerId', 'Surname'], axis=1, inplace=True)
     return df, 'Exited', ['Geography', 'Gender', 'HasCrCard', 'IsActiveMember']
 
@@ -265,6 +266,7 @@ def read_hr() -> Tuple[pd.DataFrame, str, list]:
     Returns:
         Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.
     """
-    df_train = pd.read_csv('data/hr_analytics/aug_train.csv')
+    filepath = _download_file(filepath = 'hr_analytics/aug_train.csv', url = 'https://github.com/hypper-team/hypper/raw/main/data/hr_analytics.zip')
+    df_train = pd.read_csv(filepath)
     df_train.drop(['enrollee_id'], axis=1, inplace=True)
     return df_train, 'target', [i for i in df_train.columns if i != 'target']
