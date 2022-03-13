@@ -1,9 +1,8 @@
 from setuptools import setup
 from pathlib import Path
 import sys
-import subprocess
 
-__version__ = "0.0.4"
+__version__ = "0.0.1"
 
 # Check Python version
 if sys.version_info < (3, 7):
@@ -46,7 +45,6 @@ setup(
             "pytest>=7.0.1",
             "decorator>=5.1.1",
             "pdoc>=10.0.3"
-
         ],
     },
 )

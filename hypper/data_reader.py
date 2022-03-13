@@ -1,13 +1,26 @@
-from typing import Tuple
-import pandas as pd
-import numpy as np
+import os
 import tempfile
 import zipfile
-from pandas.core.frame import DataFrame
-
-from sklearn.model_selection import train_test_split
-from urllib.request import URLopener
 from pathlib import Path
+from typing import Tuple
+from urllib.request import URLopener
+
+import numpy as np
+import pandas as pd
+from pandas.core.frame import DataFrame
+from sklearn.model_selection import train_test_split
+
+DATAFILES_PREFIX = '~/.hypper/'
+
+def save_file(df: pd.DataFrame, filepath: str) -> None:
+    pass
+
+def file_exist(filepath: str) -> bool:
+    return os.path.isfile(filepath)
+
+def read_file(filepath: str) -> pd.DataFrame:
+    pass
+
 
 def read_sample_data() -> Tuple[pd.DataFrame, str, list]:
     """Loads custom sample dataset.
@@ -24,19 +37,25 @@ def read_sample_data() -> Tuple[pd.DataFrame, str, list]:
     return pd.DataFrame.from_dict(DF_TEST_STRUCTURE).set_index('index'), 'y', ['x1', 'x2']
 
 def read_german_data() -> Tuple[pd.DataFrame, str, list]:
-    """Loads `German Credit Data`.
+    # """Loads `German Credit Data`.
     
-    **Dataset**: https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)
-    **Download link**: https://www.kaggle.com/kabure/german-credit-data-with-risk/download
+    # **Dataset**: https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)
+    # **Download link**: https://www.kaggle.com/kabure/german-credit-data-with-risk/download
 
-    Returns:
-        Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.
-    """
-    df = pd.read_csv('data/german/german_credit_data.csv', index_col=0)
-    # df.drop(['Credit amount'], axis=1, inplace=True) # Only for feature importance purposes
-    categorical_cols = [
-        'Sex', 'Job', 'Housing', 'Saving accounts', 'Checking account', 'Purpose']
-    return df, 'Risk', categorical_cols
+    # Returns:
+    #     Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.
+    # """
+    # df = pd.read_csv('data/german/german_credit_data.csv', index_col=0)
+    # # df.drop(['Credit amount'], axis=1, inplace=True) # Only for feature importance purposes
+    # categorical_cols = [
+    #     'Sex', 'Job', 'Housing', 'Saving accounts', 'Checking account', 'Purpose']
+    # return df, 'Risk', categorical_cols
+    filepath = os.path.expanduser(DATAFILES_PREFIX+"german_credit_data.csv")
+    if file_exist(filepath):
+        df = pd.read_csv('data/german/german_credit_data.csv', index_col=0)
+    print()
+
+read_german_data()
 
 def read_abdominal_pain_data() -> Tuple[pd.DataFrame, str, list]:
     """Loads `Acute Inflammations Data Set`.
