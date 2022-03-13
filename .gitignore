@@ -1,7 +1,14 @@
 # Project
-data/
 .vscode/
 requirements.txt
+
+# Excluded datasets
+data/abdominal_pain
+data/car_evaluation
+data/criteo
+data/primary_tumor
+data/vowes
+data/wine_quality
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
