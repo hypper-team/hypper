@@ -3,9 +3,7 @@ import time
 from sklearn.model_selection import ParameterGrid
 
 from hypper.hypergraph import HyperGraph
-from hypper.data_reader import read_german_data, read_criteo, \
-    read_breast_cancer_data, read_spect_heart, read_congressional_voting_records, \
-    read_banking, read_phishing, read_churn, read_hr, read_sample_data
+from hypper.data_reader import read_german_data, read_spect_heart, read_sample_data
 
 DS = [
     read_german_data(),
