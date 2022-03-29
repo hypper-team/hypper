@@ -1,3 +1,5 @@
+![](logo/logo1.png)
+
 Hypper is a data-mining Python library for binary classification. It uses hypergraph-based methods to explore datasets for the purpose of undersampling, feature selection and binary classification.
 
 Hypper provides an easy-to-use interface familiar to well-recognized Scikit-Learn API. 
