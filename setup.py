@@ -17,10 +17,11 @@ setup(
     version=__version__,
     author="Szymon Janowski, Paweł Misiorek",
     author_email="szy.janowski@gmail.com, pawel.misiorek@put.poznan.pl",
-    url="https://github.com/sleter/hypper",
+    url="https://github.com/hypper-team/hypper",
     description="Hypergraph-based data mining tool for binary classification.",
+    keywords='hypergraphs machine-learning undersampling feature-selection classification',
     project_urls={
-        "Bug Tracker": "https://github.com/sleter/hypper/issues",
+        "Bug Tracker": "https://github.com/hypper-team/hypper/issues",
         "Documentation": "https://hypper-team.github.io/hypper.html"
     },
     install_requires=[
