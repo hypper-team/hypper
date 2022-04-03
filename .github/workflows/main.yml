@@ -1,4 +1,4 @@
-name: Build, test and upload Hypper Python Package
+name: build
 
 on:
   push:
