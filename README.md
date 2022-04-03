@@ -36,7 +36,7 @@ pip install -e .['all']
 pytest
 ```
 ## Important links
-* Source code - [https://github.com/sleter/hypper](https://github.com/sleter/hypper)
+* Source code - [https://github.com/hypper-team/hypper](https://github.com/hypper-team/hypper)
 * Documentation - [https://hypper-team.github.io/hypper.html](https://hypper-team.github.io/hypper.html)
 
 ### Citation
