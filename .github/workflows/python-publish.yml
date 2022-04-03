@@ -3,10 +3,10 @@ name: Build, test and upload Hypper Python Package
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     branches:
-    - master
+    - main
 
 jobs:
   test:
