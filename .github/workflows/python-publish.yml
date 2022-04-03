@@ -57,14 +57,14 @@ jobs:
 
     - name: Push documentation
       uses: cpina/github-action-push-to-another-repository@main
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-        with:
-          source-directory: 'hypper-team.github.io'
-          destination-github-username: 'hypper-team'
-          destination-repository-name: 'hypper-team.github.io'
-          user-email: ${{ secrets.USER_EMAIL_GITHUB }}
-          target-branch: main
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+      with:
+        source-directory: 'hypper-team.github.io'
+        destination-github-username: 'hypper-team'
+        destination-repository-name: 'hypper-team.github.io'
+        user-email: ${{ secrets.USER_EMAIL_GITHUB }}
+        target-branch: main
 
     - name: Build package
       run: python -m build
