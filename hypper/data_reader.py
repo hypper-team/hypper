@@ -134,7 +134,7 @@ def read_spect_heart() -> Tuple[pd.DataFrame, str, list]:
     """
     f_cols = [f'F{i}' for i in range(1, 23)]
     names = ['overall_diangnosis'] + f_cols
-    filepath = _download_file(filepath = 'data/spect_heart', url = 'https://github.com/hypper-team/hypper/raw/main/data/spect_heart.zip')
+    filepath = _download_file(filepath = 'spect_heart', url = 'https://github.com/hypper-team/hypper/raw/main/data/spect_heart.zip')
     df_train = pd.read_csv(filepath / 'SPECT.train', names = names)
     df_test = pd.read_csv(filepath / 'SPECT.test', names = names)
     return pd.concat([df_train, df_test], ignore_index=True), 'overall_diangnosis', f_cols
