@@ -19,8 +19,7 @@ def test_CDWFS(dfs=DS, weighting_iterations_list = [1,2,5], weighting_normalizat
     for pgi in pg:
         cdwfs = CDWFS(weighting_iterations=pgi['wi'], weighting_normalization_strategy=pgi['wns'], feature_values=feature_values, random_seed=42, verbosity=False)
         out = cdwfs.fit_transform(pgi['dfs'][0], label_column=pgi['dfs'][1])
-        if out.size != 0: continue
-    return True
+        assert out.size != 0
 
 def test_RWFS(dfs=DS, iterations=[1,10], walk_length=[2,3], scoring_variant=['v1_1','v1_2','v1_3','v1_4'], feature_values=[True, False]):
     pg = ParameterGrid({
@@ -38,5 +37,4 @@ def test_RWFS(dfs=DS, iterations=[1,10], walk_length=[2,3], scoring_variant=['v1
             feature_values=pgi['fv']
             )
         out = rwfs.fit_transform(pgi['dfs'][0], label_column=pgi['dfs'][1])
-        if out.size != 0: continue
-    return True
+        assert out.size != 0

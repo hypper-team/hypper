@@ -25,8 +25,7 @@ def test_CDWU(dfs=DS, weighting_iterations_list = [1,2,5], weighting_normalizati
     for pgi in pg:
         cdwu = CDWU(weighting_iterations=pgi['wi'], weighting_normalization_strategy=pgi['wns'], majority_left_threshold=pgi['mlt'], random_seed=42, verbosity=False)
         out = cdwu.fit_transform(pgi['dfs'][0], label_column=pgi['dfs'][1])
-        if out.size != 0: continue
-    return True
+        assert out.size != 0
 
 def test_deterministic_run():
     cdwu = CDWU(
