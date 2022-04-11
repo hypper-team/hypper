@@ -25,15 +25,17 @@ setup(
         "Documentation": "https://hypper-team.github.io/hypper.html"
     },
     install_requires=[
-        "pandas>=1.4.1",
-        "numpy>=1.22.3",
-        "scikit-learn>=1.0.2",
-        "bidict>=0.21.4",
-        "psutil>=5.9.0",
-        "hypernetx>=1.2.3"
+        "pandas==1.3.5",
+        "numpy==1.21.0",
+        "scikit-learn==1.0.2",
+        "bidict==0.22.0",
+        "psutil==5.9.0",
+        "hypernetx==1.2.3",
+        "requests==2.27.1"
     ],
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
     ],
@@ -43,9 +45,9 @@ setup(
         "testing": ["pytest>=7.0.1"],
         "documentation": ["decorator>=5.1.1", "pdoc>=10.0.3"],
         "all": [
-            "pytest>=7.0.1",
-            "decorator>=5.1.1",
-            "pdoc>=10.0.3"
+            "pytest==7.1.1",
+            "decorator==5.1.1",
+            "pdoc==10.0.3"
         ],
     },
 )
