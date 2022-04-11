@@ -56,21 +56,19 @@ jobs:
         python -m pip install -e .['documentation']
 
     - name: Update documentation locally
-      run: |
+      run:
         pdoc -o docs/ -d google hypper/ --favicon https://github.com/hypper-team/hypper/raw/main/logo/favicon.png --logo https://github.com/hypper-team/hypper/raw/main/logo/logo1.png --logo-link https://hypper-team.github.io/hypper.html --footer-text "Hypper API Documentation"
-        git clone https://github.com/hypper-team/hypper-team.github.io.git
-        cp -r docs/* hypper-team.github.io/
 
     - name: Push documentation
       uses: cpina/github-action-push-to-another-repository@main
       env:
         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
       with:
-        source-directory: 'hypper-team.github.io'
+        source-directory: 'docs'
         destination-github-username: 'hypper-team'
         destination-repository-name: 'hypper-team.github.io'
         user-email: ${{ secrets.USER_EMAIL_GITHUB }}
-        target-branch: main
+        target-branch: master
 
     - name: Build package
       run: python -m build
