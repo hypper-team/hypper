@@ -1,6 +1,6 @@
 # Project
 .vscode/
-requirements.txt
+# requirements.txt
 
 # Inlude zipped datasets only
 data/*
