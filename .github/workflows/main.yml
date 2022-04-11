@@ -11,7 +11,7 @@ on:
 jobs:
   test:
     name: Test pull request
-    if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -37,8 +37,8 @@ jobs:
           pytest
 
   upload:
-    name: Upload yo PyPI
-    if:  github.event_name == 'push' && github.ref == 'refs/heads/main' && startsWith(github.ref, 'refs/tags')
+    name: Upload to PyPI
+    if:  github.event_name == 'push' # && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
