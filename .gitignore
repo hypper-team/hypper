@@ -1,6 +1,6 @@
 # Project
 .vscode/
-requirements.txt
+# requirements.txt
 
 # Inlude zipped datasets only
 data/*
@@ -114,6 +114,7 @@ celerybeat.pid
 .venv
 env/
 venv/
+venv*/
 ENV/
 env.bak/
 venv.bak/

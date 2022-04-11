@@ -1,4 +1,4 @@
-name: Build, test and upload Hypper Python Package
+name: build
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 jobs:
   test:
     name: Test pull request
-    if: github.event_name == 'pull_request' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'pull_request'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -37,8 +37,8 @@ jobs:
           pytest
 
   upload:
-    name: Upload yo PyPI
-    if:  github.event_name == 'push' && github.ref == 'refs/heads/master'
+    name: Upload to PyPI
+    if:  github.event_name == 'push' # && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
@@ -75,8 +75,9 @@ jobs:
     - name: Build package
       run: python -m build
 
-    - name: Publish package
+    - name: Publish package on PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
+        

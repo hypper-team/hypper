@@ -1,5 +1,7 @@
 ![](logo/logo1.png)
 
+![PyPI](https://img.shields.io/pypi/v/hypper) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hypper) ![PyPI - Wheel](https://img.shields.io/pypi/wheel/hypper) ![build](https://github.com/hypper-team/hypper/actions/workflows/main.yml/badge.svg) ![PyPI - Downloads](https://img.shields.io/pypi/dw/hypper) ![PyPI - License](https://img.shields.io/pypi/l/hypper)
+
 Hypper is a data-mining Python library for binary classification. It uses hypergraph-based methods to explore datasets for the purpose of undersampling, feature selection and binary classification.
 
 Hypper provides an easy-to-use interface familiar to well-recognized Scikit-Learn API. 
