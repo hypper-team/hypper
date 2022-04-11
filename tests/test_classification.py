@@ -20,5 +20,5 @@ def test_CDWC(dfs=DS, weighting_iterations_list = [1,2,5], weighting_normalizati
         cdwc.fit(pgi['dfs'][0], label_column=pgi['dfs'][1])
         y_pred = cdwc.predict(pgi['dfs'][0].drop(pgi['dfs'][1], axis=1).head(3))
         y_pred_prob = cdwc.predict_proba(pgi['dfs'][0].drop(pgi['dfs'][1], axis=1).head(3))
-        if (y_pred.size != 0) and (y_pred_prob.size != 0): continue
-    assert True
+        assert y_pred.size != 0
+        assert y_pred_prob.size != 0

@@ -22,7 +22,7 @@ def test_weighting(dfs=DS, weighting_iterations_list = [1,2,5], weighting_normal
     for pgi in pg:
         hg = HyperGraph(input_data=pgi['dfs'][0], label=pgi['dfs'][1])
         hg.calculate_weights(pgi['wi'], normalization_strategy=pgi['wns'], iter_history=pgi['ih'])
-        if hg.edges_weights.size != 0: continue
+        assert hg.edges_weights.size != 0
+        assert hg.vertices_weights.size != 0
     end = time.time()
     print(f"Weighting testing time: {end - start}")
-    assert True
