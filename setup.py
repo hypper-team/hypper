@@ -2,7 +2,7 @@ from setuptools import setup
 from pathlib import Path
 import sys
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 # Check Python version
 if sys.version_info < (3, 7):
