@@ -4,13 +4,21 @@ import numpy as np
 from .base import Base, PredictorMixin
 from sklearn.preprocessing import OneHotEncoder
 
+
 class CDWC(Base, PredictorMixin):
     """Hypergraph-based binary classifier.
 
     Classifier is based on the hypergraph class-dependent weighting method.
 
     """
-    def __init__(self, weighting_iterations: int, weighting_normalization_strategy='max', random_seed=42, verbosity=None) -> None:
+
+    def __init__(
+        self,
+        weighting_iterations: int,
+        weighting_normalization_strategy="max",
+        random_seed=42,
+        verbosity=None,
+    ) -> None:
         """
         Args:
             weighting_iterations (int): Number of weighting iterations during hypergraph class-dependent weighting method.
@@ -35,7 +43,10 @@ class CDWC(Base, PredictorMixin):
             self
         """
         super().fit(data, label_column)
-        self.hg.calculate_weights(iterations=self.weighting_iterations, normalization_strategy=self.weighting_normalization_strategy)
+        self.hg.calculate_weights(
+            iterations=self.weighting_iterations,
+            normalization_strategy=self.weighting_normalization_strategy,
+        )
         return self
 
     def _modify_fi(self, fi: pd.DataFrame) -> pd.DataFrame:
@@ -76,27 +87,38 @@ class CDWC(Base, PredictorMixin):
         feature_value_weights = pd.DataFrame(
             data=self.hg.edges_weights.todense().T,
             columns=list(range(len(self.hg.edges_labels))),
-            index=self.hg.edges.keys())
+            index=self.hg.edges.keys(),
+        )
         feature_weights = self._modify_fi(feature_value_weights)
 
         def calculate_score(row):
             try:
-                feature_value_pairs = OneHotEncoder(drop = None, sparse=True, handle_unknown='error').fit(row.values.reshape(1, -1)).get_feature_names_out(self.hg.X.columns)
+                feature_value_pairs = (
+                    OneHotEncoder(drop=None, sparse=True, handle_unknown="error")
+                    .fit(row.values.reshape(1, -1))
+                    .get_feature_names_out(self.hg.X.columns)
+                )
             except ValueError as ve:
-                raise ValueError("Number of features does not match input data").with_traceback(ve.__traceback__)
+                raise ValueError(
+                    "Number of features does not match input data"
+                ).with_traceback(ve.__traceback__)
 
-            score_per_class = np.zeros((len(self.hg.edges_labels), ))
+            score_per_class = np.zeros((len(self.hg.edges_labels),))
 
             for fv in feature_value_pairs:
                 try:
-                    score_per_class += self.hg.edges_weights.getcol(self.hg.edges[fv]).todense().A1
+                    score_per_class += (
+                        self.hg.edges_weights.getcol(self.hg.edges[fv]).todense().A1
+                    )
                 except KeyError:
                     feature = next(p for p in self.hg.X.columns if p in fv)
-                    score_per_class += feature_weights.loc[feature_weights.index == feature].values[0]
-            
+                    score_per_class += feature_weights.loc[
+                        feature_weights.index == feature
+                    ].values[0]
+
             return score_per_class
 
-        return X.apply(calculate_score, axis=1, result_type='expand').values
+        return X.apply(calculate_score, axis=1, result_type="expand").values
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         """Method returns class predictions.
@@ -119,4 +141,4 @@ class CDWC(Base, PredictorMixin):
             np.ndarray: Array with predicted probabilities for classes.
         """
         X = self.classifier(X)
-        return X/X.sum(axis=1)[:,None]
+        return X / X.sum(axis=1)[:, None]

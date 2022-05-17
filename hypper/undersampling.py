@@ -7,20 +7,24 @@ from random import random, seed
 
 from .base import TransformerMixin, Base
 
+
 class CDWU(Base, TransformerMixin):
     """Hypergraph-based undersampling method.
-    
+
     Method resamples dataset based on class-dependent weighting algorithm.
     """
-    def __init__(self,
+
+    def __init__(
+        self,
         weighting_iterations: int,
-        weighting_normalization_strategy='max',
+        weighting_normalization_strategy="max",
         weighting_history=True,
         version=1,
         majority_left_threshold=0.0,
         randomize_A=0.0,
         random_seed=42,
-        verbosity=None) -> None:
+        verbosity=None,
+    ) -> None:
         """_summary_
 
         Args:
@@ -47,7 +51,9 @@ class CDWU(Base, TransformerMixin):
         self.weighting_normalization_strategy = weighting_normalization_strategy
         self.weighting_history = weighting_history
         if not (0.0 <= majority_left_threshold < 1.0):
-            raise ValueError(f"Expected value in range <0.0, 1.0), while majority_left_threshold = {majority_left_threshold}")
+            raise ValueError(
+                f"Expected value in range <0.0, 1.0), while majority_left_threshold = {majority_left_threshold}"
+            )
         self.majority_left_threshold = majority_left_threshold
         self.version = version
         self.randomize_A = randomize_A
@@ -55,78 +61,167 @@ class CDWU(Base, TransformerMixin):
         self.random_seed = random_seed
         self.verbosity = verbosity
 
-    def _undersampling(self, weighting_iterations: int, weighting_normalization_strategy: str, majority_left_threshold: float, \
-                            weighting_history: bool, version: int, randomize_A: float) -> pd.DataFrame:
+    def _undersampling(
+        self,
+        weighting_iterations: int,
+        weighting_normalization_strategy: str,
+        majority_left_threshold: float,
+        weighting_history: bool,
+        version: int,
+        randomize_A: float,
+    ) -> pd.DataFrame:
         # Find majority class
         initial_class_distribution = copy(self.hg.vertices_weights)
         distribution = initial_class_distribution.sum(axis=0)
-        size_diff_between_classes = int(np.abs(np.diff(distribution)[0,0]))
+        size_diff_between_classes = int(np.abs(np.diff(distribution)[0, 0]))
         minority_class = distribution.argmin()
-        if minority_class == 0: majority_class = 1
-        elif minority_class == 1: majority_class = 0
-        else: Warning("Multiclass classification problems are not supported.")
+        if minority_class == 0:
+            majority_class = 1
+        elif minority_class == 1:
+            majority_class = 0
+        else:
+            Warning("Multiclass classification problems are not supported.")
         # Calculates class-dependent vertices weights
-        self.hg.calculate_weights(iterations=weighting_iterations, normalization_strategy=weighting_normalization_strategy, iter_history=True)
+        self.hg.calculate_weights(
+            iterations=weighting_iterations,
+            normalization_strategy=weighting_normalization_strategy,
+            iter_history=True,
+        )
         # Reduce vertex weight to single value
         if version == 1:
             if weighting_history:
-                subtracted_weights = self.hg.weighting_iteration_history[0][1][:,majority_class].todense() - self.hg.weighting_iteration_history[0][1][:,minority_class].todense()
+                subtracted_weights = (
+                    self.hg.weighting_iteration_history[0][1][
+                        :, majority_class
+                    ].todense()
+                    - self.hg.weighting_iteration_history[0][1][
+                        :, minority_class
+                    ].todense()
+                )
                 for _, vertices_weights in self.hg.weighting_iteration_history[1:]:
-                    subtracted_weights += vertices_weights[:,majority_class].todense()-vertices_weights[:,minority_class].todense()
+                    subtracted_weights += (
+                        vertices_weights[:, majority_class].todense()
+                        - vertices_weights[:, minority_class].todense()
+                    )
             else:
-                subtracted_weights = self.hg.vertices_weights[:,majority_class].todense()-self.hg.vertices_weights[:,minority_class].todense()
+                subtracted_weights = (
+                    self.hg.vertices_weights[:, majority_class].todense()
+                    - self.hg.vertices_weights[:, minority_class].todense()
+                )
         elif version == 2:
             if weighting_history:
-                subtracted_weights = self.hg.weighting_iteration_history[0][1][:,majority_class].todense() + self.hg.weighting_iteration_history[0][1][:,minority_class].todense()
+                subtracted_weights = (
+                    self.hg.weighting_iteration_history[0][1][
+                        :, majority_class
+                    ].todense()
+                    + self.hg.weighting_iteration_history[0][1][
+                        :, minority_class
+                    ].todense()
+                )
                 for _, vertices_weights in self.hg.weighting_iteration_history[1:]:
-                    subtracted_weights += vertices_weights[:,majority_class].todense()+vertices_weights[:,minority_class].todense()
+                    subtracted_weights += (
+                        vertices_weights[:, majority_class].todense()
+                        + vertices_weights[:, minority_class].todense()
+                    )
             else:
-                subtracted_weights = self.hg.vertices_weights[:,majority_class].todense()+self.hg.vertices_weights[:,minority_class].todense()
+                subtracted_weights = (
+                    self.hg.vertices_weights[:, majority_class].todense()
+                    + self.hg.vertices_weights[:, minority_class].todense()
+                )
         elif version == 3:
             if weighting_history:
-                subtracted_weights = self.hg.weighting_iteration_history[0][1][:,minority_class].todense()
+                subtracted_weights = self.hg.weighting_iteration_history[0][1][
+                    :, minority_class
+                ].todense()
                 for _, vertices_weights in self.hg.weighting_iteration_history[1:]:
-                    subtracted_weights += vertices_weights[:,minority_class].todense()
+                    subtracted_weights += vertices_weights[:, minority_class].todense()
             else:
-                subtracted_weights = self.hg.vertices_weights[:,minority_class].todense()
+                subtracted_weights = self.hg.vertices_weights[
+                    :, minority_class
+                ].todense()
         elif version == 4:
             if weighting_history:
-                subtracted_weights = self.hg.weighting_iteration_history[0][1][:,minority_class].todense() - self.hg.weighting_iteration_history[0][1][:,majority_class].todense()
+                subtracted_weights = (
+                    self.hg.weighting_iteration_history[0][1][
+                        :, minority_class
+                    ].todense()
+                    - self.hg.weighting_iteration_history[0][1][
+                        :, majority_class
+                    ].todense()
+                )
                 for _, vertices_weights in self.hg.weighting_iteration_history[1:]:
-                    subtracted_weights += vertices_weights[:,minority_class].todense()-vertices_weights[:,majority_class].todense()
+                    subtracted_weights += (
+                        vertices_weights[:, minority_class].todense()
+                        - vertices_weights[:, majority_class].todense()
+                    )
             else:
-                subtracted_weights = self.hg.vertices_weights[:,minority_class].todense()-self.hg.vertices_weights[:,majority_class].todense()
+                subtracted_weights = (
+                    self.hg.vertices_weights[:, minority_class].todense()
+                    - self.hg.vertices_weights[:, majority_class].todense()
+                )
         elif version == 5:
             if weighting_history:
-                subtracted_weights = np.abs(self.hg.weighting_iteration_history[0][1][:,0].todense() - self.hg.weighting_iteration_history[0][1][:,1].todense())
+                subtracted_weights = np.abs(
+                    self.hg.weighting_iteration_history[0][1][:, 0].todense()
+                    - self.hg.weighting_iteration_history[0][1][:, 1].todense()
+                )
                 for _, vertices_weights in self.hg.weighting_iteration_history[1:]:
-                    subtracted_weights += np.abs(vertices_weights[:,0].todense()-vertices_weights[:,1].todense())
+                    subtracted_weights += np.abs(
+                        vertices_weights[:, 0].todense()
+                        - vertices_weights[:, 1].todense()
+                    )
             else:
-                subtracted_weights = self.hg.vertices_weights[:,0].todense()-self.hg.vertices_weights[:,1].todense()
+                subtracted_weights = (
+                    self.hg.vertices_weights[:, 0].todense()
+                    - self.hg.vertices_weights[:, 1].todense()
+                )
         elif version == 6:
             if weighting_history:
-                subtracted_weights = self.hg.weighting_iteration_history[0][1][:,majority_class].todense()
+                subtracted_weights = self.hg.weighting_iteration_history[0][1][
+                    :, majority_class
+                ].todense()
                 for _, vertices_weights in self.hg.weighting_iteration_history[1:]:
-                    subtracted_weights += vertices_weights[:,majority_class].todense()
+                    subtracted_weights += vertices_weights[:, majority_class].todense()
             else:
-                subtracted_weights = self.hg.vertices_weights[:,majority_class].todense()
+                subtracted_weights = self.hg.vertices_weights[
+                    :, majority_class
+                ].todense()
         else:
-            raise SyntaxError(f'Unknown scoring version: {version}')
+            raise SyntaxError(f"Unknown scoring version: {version}")
         # Add random selection
         if randomize_A > 0.0:
             # num_to_remove = int(np.max(distribution)/50)
             # low_weight_indxs = np.argsort(subtracted_weights, axis=None)[:,:num_to_remove].tolist()[0]
             temp_max_weight = np.amax(subtracted_weights)
             seed(self.random_seed)
-            subtracted_weights = np.apply_along_axis(lambda x: x + randomize_A * temp_max_weight*random(), 1, subtracted_weights).reshape(-1, 1)
+            subtracted_weights = np.apply_along_axis(
+                lambda x: x + randomize_A * temp_max_weight * random(),
+                1,
+                subtracted_weights,
+            ).reshape(-1, 1)
             # subtracted_weights[np.r_[low_weight_indxs]] = subtracted_weights.min()-1
 
         # Replace minority class with max values (can't be removed)
-        subtracted_weights[initial_class_distribution[:,minority_class].todense() == 1] = subtracted_weights.max()+1
+        subtracted_weights[
+            initial_class_distribution[:, minority_class].todense() == 1
+        ] = (subtracted_weights.max() + 1)
         # Find vertices to drop
-        num_of_idxs_to_drop = int(min(size_diff_between_classes, size_diff_between_classes-np.ceil(size_diff_between_classes*majority_left_threshold)))
-        indxs_to_drop = [self.hg.vertices.inverse[i] for i in subtracted_weights.argsort(axis=None)[:,:num_of_idxs_to_drop].tolist()[0]]        
-        return pd.concat([self.hg.X.drop(indxs_to_drop), self.hg.y.drop(indxs_to_drop)], axis=1)
+        num_of_idxs_to_drop = int(
+            min(
+                size_diff_between_classes,
+                size_diff_between_classes
+                - np.ceil(size_diff_between_classes * majority_left_threshold),
+            )
+        )
+        indxs_to_drop = [
+            self.hg.vertices.inverse[i]
+            for i in subtracted_weights.argsort(axis=None)[
+                :, :num_of_idxs_to_drop
+            ].tolist()[0]
+        ]
+        return pd.concat(
+            [self.hg.X.drop(indxs_to_drop), self.hg.y.drop(indxs_to_drop)], axis=1
+        )
 
     def fit(self, data: pd.DataFrame, label_column: str):
         """Fit data.
@@ -164,5 +259,5 @@ class CDWU(Base, TransformerMixin):
             majority_left_threshold=self.majority_left_threshold,
             weighting_history=self.weighting_history,
             version=self.version,
-            randomize_A=self.randomize_A
+            randomize_A=self.randomize_A,
         )
