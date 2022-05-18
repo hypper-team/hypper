@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from .base import Base, PredictorMixin
+from ..base import Base, PredictorMixin
 from sklearn.preprocessing import OneHotEncoder
 
 

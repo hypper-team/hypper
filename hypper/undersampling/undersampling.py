@@ -5,7 +5,7 @@ import pandas as pd
 from copy import copy
 from random import random, seed
 
-from .base import TransformerMixin, Base
+from ..base import TransformerMixin, Base
 
 
 class CDWU(Base, TransformerMixin):

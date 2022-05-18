@@ -5,7 +5,7 @@ from scipy.sparse import csr_matrix
 from collections import Counter, defaultdict
 from sklearn.preprocessing import OneHotEncoder
 
-from .base import TransformerMixin, Base
+from ..base import TransformerMixin, Base
 
 
 class BaseFS:

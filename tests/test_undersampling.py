@@ -5,7 +5,7 @@ from pandas.testing import assert_frame_equal
 from pathlib import Path
 
 from hypper.undersampling import CDWU
-from hypper.data_reader import read_german_data, read_spect_heart, read_sample_data
+from hypper.data import read_german_data, read_spect_heart, read_sample_data
 
 DS = [read_german_data(), read_spect_heart(), read_sample_data()]
 

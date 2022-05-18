@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 
-from hypper.data_reader import (
+from hypper.data import (
     read_banking,
     read_breast_cancer_data,
     read_churn,

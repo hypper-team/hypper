@@ -2,7 +2,7 @@ import pytest
 from sklearn.model_selection import ParameterGrid
 
 from hypper.classification import CDWC
-from hypper.data_reader import read_german_data, read_spect_heart, read_sample_data
+from hypper.data import read_german_data, read_spect_heart, read_sample_data
 
 DS = [read_german_data(), read_spect_heart(), read_sample_data()]
 

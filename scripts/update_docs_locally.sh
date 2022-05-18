@@ -4,5 +4,5 @@ pdoc -o docs/ -d google hypper/ --favicon https://github.com/hypper-team/hypper/
 cp -r docs/* ../hypper-team.github.io/
 cd ../hypper-team.github.io/
 git add .
-git commit -m "Documentation updates"
+git commit -m "Documentation update"
 git push
