@@ -11,7 +11,7 @@ class HNX_Hypergraph(hypernetx.Hypergraph):
     Hypper hypergraph representation can be visualized thanks to HyperNetX library (**https://github.com/pnnl/HyperNetX**).
     """
 
-    def __init__(self, hg: HyperGraph, include_label=False):
+    def __init__(self, hg: HyperGraph, include_label: bool = False):
         """Creates hypergraph representation with HyperNetX library.
         Args:
             hg (hypper.hypergraph.HyperGraph): Hypper HyperGraph object.
@@ -34,10 +34,10 @@ class HNX_Hypergraph(hypernetx.Hypergraph):
                 )
         return new_representation
 
-    def draw(self, **kwargs):
+    def draw(self, **kwargs) -> None:
         """Method uses hypernetx.draw to plot hypergraph."""
         hypernetx.draw(self, **kwargs)
 
-    def draw_collapse_nodes(self, **kwargs):
+    def draw_collapse_nodes(self, **kwargs) -> None:
         """Method uses hypernetx.draw with `collapsed_nodes` parameter to plot hypergraph."""
         hypernetx.draw(self.collapse_nodes(), **kwargs)

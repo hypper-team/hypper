@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -18,16 +19,16 @@ class CDWC(Base, PredictorMixin):
     def __init__(
         self,
         weighting_iterations: int,
-        weighting_normalization_strategy="max",
-        random_seed=42,
-        verbosity: logging.LogRecord = BASE_LOGGING_LEVEL,
+        weighting_normalization_strategy: str = "max",
+        random_seed: Optional[int] = 42,
+        verbosity: Optional[logging.LogRecord] = BASE_LOGGING_LEVEL,
     ) -> None:
         """
         Args:
             weighting_iterations (int): Number of weighting iterations during hypergraph class-dependent weighting method.
             weighting_normalization_strategy (str, optional): Type of normalization during hypergraph class-dependent weighting method. Defaults to 'max'. Options: 'max', 'l1', 'l2'.
             random_seed (int, optional): Random seed. Defaults to 42.
-            verbosity (int, optional): Value greater than 0 displays info about the trainign process. Defaults to None.
+            verbosity (logging.LogRecord, optional): Specifies the lowest-severity log message a logger will handle. Defaults to logging.WARNING.
         """
         self.weighting_iterations = weighting_iterations
         self.weighting_normalization_strategy = weighting_normalization_strategy

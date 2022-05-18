@@ -2,10 +2,6 @@
 requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
 
-[tool.autopep8]
-in-place = true
-recursive = true
-
 [tool.black]
 line-length = 88
 target-version = ["py37","py38","py39","py310"]

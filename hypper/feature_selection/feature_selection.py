@@ -1,5 +1,6 @@
 import logging
 from collections import Counter, defaultdict
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -36,10 +37,10 @@ class CDWFS(BaseFS, Base, TransformerMixin):
     def __init__(
         self,
         weighting_iterations: int,
-        weighting_normalization_strategy="max",
-        feature_values=True,
-        random_seed=42,
-        verbosity: logging.LogRecord = BASE_LOGGING_LEVEL,
+        weighting_normalization_strategy: Optional[str] = "max",
+        feature_values: Optional[bool] = True,
+        random_seed: Optional[int] = 42,
+        verbosity: Optional[logging.LogRecord] = BASE_LOGGING_LEVEL,
     ) -> None:
         """
         Args:
@@ -47,7 +48,7 @@ class CDWFS(BaseFS, Base, TransformerMixin):
             weighting_normalization_strategy (str, optional): Type of normalization during hypergraph class-dependent weighting method. Defaults to 'max'. Options: 'max', 'l1', 'l2'.
             feature_values (bool, optional): If method should return feature-value pairs or features (aggregated) importances. Defaults to True for feature-value pairs.
             random_seed (int, optional): Random seed. Defaults to 42.
-            verbosity (int, optional): Value greater than 0 displays info about process progress. Defaults to None.
+            verbosity (logging.LogRecord, optional): Specifies the lowest-severity log message a logger will handle. Defaults to logging.WARNING.
         """
         self.weighting_iterations = weighting_iterations
         self.weighting_normalization_strategy = weighting_normalization_strategy
@@ -140,20 +141,20 @@ class RandomWalkFS(BaseFS, Base, TransformerMixin):
         self,
         iterations: int,
         walk_length: int,
-        scoring_variant="v1_3",
-        feature_values=True,
-        random_seed=42,
-        verbosity: logging.LogRecord = BASE_LOGGING_LEVEL,
+        scoring_variant: Optional[str] = "v1_3",
+        feature_values: Optional[bool] = True,
+        random_seed: Optional[int] = 42,
+        verbosity: Optional[logging.LogRecord] = BASE_LOGGING_LEVEL,
     ) -> None:
         """_summary_
 
         Args:
             iterations (int): Number of random walks iterations.
             walk_length (int): Random walks maximum length.
-            scoring_variant (str, optional): Formula used to calculate score. Defaults to 'v1_3'. Options: 'v1_1', 'v1_2', 'v1_3' and 'v1_4'.. Defaults to 'v1_3'.
+            scoring_variant (str, optional): Formula used to calculate score. Defaults to 'v1_3'. Options: 'v1_1', 'v1_2', 'v1_3' and 'v1_4'. Defaults to 'v1_3'.
             feature_values (bool, optional): _description_. Defaults to True.
             random_seed (int, optional): _description_. Defaults to 42.
-            verbosity (bool, optional): _description_. Defaults to False.
+            verbosity (logging.LogRecord, optional): Specifies the lowest-severity log message a logger will handle. Defaults to logging.WARNING.
 
         Raises:
             SyntaxError: Raised when unknown scoring variant is passed to a function.

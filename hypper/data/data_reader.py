@@ -1,6 +1,6 @@
 import io
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, List
 from zipfile import ZipFile
 
 import numpy as np
@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 DATAFILES_PREFIX = Path.home() / ".hypper"
 
 
-def _download_file(filepath, url):
+def _download_file(filepath: str, url: str) -> str:
     filepath = Path(DATAFILES_PREFIX / filepath)
     if not filepath.exists():
         # Create directory
@@ -23,7 +23,7 @@ def _download_file(filepath, url):
     return filepath
 
 
-def read_sample_data() -> Tuple[pd.DataFrame, str, list]:
+def read_sample_data() -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads custom sample dataset.
 
     Returns:
@@ -52,7 +52,7 @@ def read_sample_data() -> Tuple[pd.DataFrame, str, list]:
     )
 
 
-def read_german_data() -> Tuple[pd.DataFrame, str, list]:
+def read_german_data() -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `German Credit Data`.
 
     **Original Dataset**: https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)
@@ -79,7 +79,7 @@ def read_german_data() -> Tuple[pd.DataFrame, str, list]:
     return df, "Risk", categorical_cols
 
 
-def _read_abdominal_pain_data() -> Tuple[pd.DataFrame, str, list]:
+def _read_abdominal_pain_data() -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `Acute Inflammations Data Set`.
 
     **Dataset**: https://archive.ics.uci.edu/ml/datasets/Acute+Inflammations
@@ -125,7 +125,7 @@ def _read_abdominal_pain_data() -> Tuple[pd.DataFrame, str, list]:
     return df, "label", [i for i in df.columns if i != "label"]
 
 
-def read_breast_cancer_data() -> Tuple[pd.DataFrame, str, list]:
+def read_breast_cancer_data() -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `Breast Cancer Data Set`.
 
     **Dataset**: https://archive.ics.uci.edu/ml/datasets/breast+cancer
@@ -168,7 +168,7 @@ def read_breast_cancer_data() -> Tuple[pd.DataFrame, str, list]:
     )
 
 
-def _read_car_evaluation_data() -> Tuple[pd.DataFrame, str, list]:
+def _read_car_evaluation_data() -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `Car Evaluation Data Set`.
 
     **Dataset**: https://archive.ics.uci.edu/ml/datasets/car+evaluation
@@ -191,7 +191,7 @@ def _read_car_evaluation_data() -> Tuple[pd.DataFrame, str, list]:
     return df, "label", [i for i in df.columns if i != "label"]
 
 
-def read_spect_heart() -> Tuple[pd.DataFrame, str, list]:
+def read_spect_heart() -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `SPECT Heart Data Set`.
 
     **Dataset**: https://archive.ics.uci.edu/ml/datasets/spect+heart
@@ -214,7 +214,7 @@ def read_spect_heart() -> Tuple[pd.DataFrame, str, list]:
     )
 
 
-def read_congressional_voting_records() -> Tuple[pd.DataFrame, str, list]:
+def read_congressional_voting_records() -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `Congressional Voting Records Data Set`.
 
     **Dataset**: https://archive.ics.uci.edu/ml/datasets/congressional+voting+records
@@ -256,7 +256,7 @@ def read_congressional_voting_records() -> Tuple[pd.DataFrame, str, list]:
     )
 
 
-def _read_criteo(nrows=1000000, size=0.1) -> Tuple[pd.DataFrame, str, list]:
+def _read_criteo(nrows=1000000, size=0.1) -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `Criteo Sponsored Search Conversion Log Dataset`.
 
     **Dataset**: https://ailab.criteo.com/criteo-sponsored-search-conversion-log-dataset/
@@ -374,7 +374,7 @@ def _read_criteo(nrows=1000000, size=0.1) -> Tuple[pd.DataFrame, str, list]:
     )
 
 
-def read_banking() -> Tuple[pd.DataFrame, str, list]:
+def read_banking() -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `Banking Dataset - Marketing Targets`.
 
     **Dataset**: https://www.kaggle.com/prakharrathi25/banking-dataset-marketing-targets
@@ -407,7 +407,7 @@ def read_banking() -> Tuple[pd.DataFrame, str, list]:
     )
 
 
-def read_phishing() -> Tuple[pd.DataFrame, str, list]:
+def read_phishing() -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `Phishing Dataset`.
 
     **Dataset**: https://www.kaggle.com/shashwatwork/phishing-dataset-for-machine-learning
@@ -423,7 +423,7 @@ def read_phishing() -> Tuple[pd.DataFrame, str, list]:
     return df, "class_name", [i for i in df.columns if i != "class_name"]
 
 
-def read_churn() -> Tuple[pd.DataFrame, str, list]:
+def read_churn() -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `Churn Modelling`.
 
     **Dataset**: https://www.kaggle.com/shrutimechlearn/churn-modelling
@@ -440,7 +440,7 @@ def read_churn() -> Tuple[pd.DataFrame, str, list]:
     return df, "Exited", ["Geography", "Gender", "HasCrCard", "IsActiveMember"]
 
 
-def read_hr() -> Tuple[pd.DataFrame, str, list]:
+def read_hr() -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `HR Analytics: Job Change of Data Scientists`.
 
     **Dataset**: https://www.kaggle.com/arashnic/hr-analytics-job-change-of-data-scientists

@@ -3,7 +3,7 @@ import pickle
 import psutil
 import logging
 
-from typing import List, Any
+from typing import Callable, List, Any, Tuple
 from time import time
 from functools import wraps
 
@@ -33,7 +33,7 @@ def flatten(x: List[Any]) -> List[Any]:
     return [i for sl in x for i in sl]
 
 
-def save_object(obj: Any, filename: str):
+def save_object(obj: Any, filename: str) -> None:
     """Saves object in Pickle format.
 
     Args:
@@ -44,7 +44,7 @@ def save_object(obj: Any, filename: str):
         pickle.dump(obj, handle)
 
 
-def read_object(filename: str):
+def read_object(filename: str) -> Any:
     """Reads object from pickle format.
 
     Args:
@@ -54,14 +54,14 @@ def read_object(filename: str):
         return pickle.load(handle)
 
 
-def timing(f):
+def timing(f: Callable) -> Tuple[Any, float]:
     """Decorator that measure s execution time of a selected function.
 
     Args:
-        f : Function.
+        f (Callable): Function.
 
     Returns:
-        float: Return the time in seconds as a floating point number.
+        Tuple[Any, float]: Returns tuple with original function output and the time in seconds as a floating point number.
     """
 
     @wraps(f)
@@ -74,6 +74,6 @@ def timing(f):
     return wrapper
 
 
-def show_memory_usage():
+def print_memory_usage() -> None:
     """Function shows actual RAM usage."""
     print(psutil.Process(os.getpid()).memory_info().rss / 1024**2)

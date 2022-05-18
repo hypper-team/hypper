@@ -1,6 +1,7 @@
 import logging
 from copy import copy
 from random import random, seed
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -18,13 +19,13 @@ class CDWU(Base, TransformerMixin):
     def __init__(
         self,
         weighting_iterations: int,
-        weighting_normalization_strategy="max",
-        weighting_history=True,
-        version=1,
-        majority_left_threshold=0.0,
-        randomize_A=0.0,
-        random_seed=42,
-        verbosity: logging.LogRecord = BASE_LOGGING_LEVEL,
+        weighting_normalization_strategy: Optional[str] = "max",
+        weighting_history: Optional[bool] = True,
+        version: Optional[int] = 1,
+        majority_left_threshold: Optional[float] = 0.0,
+        randomize_A: Optional[float] = 0.0,
+        random_seed: Optional[int] = 42,
+        verbosity: Optional[logging.LogRecord] = BASE_LOGGING_LEVEL,
     ) -> None:
         """_summary_
 
@@ -42,7 +43,7 @@ class CDWU(Base, TransformerMixin):
             majority_left_threshold (float, optional): Parameter controlling precentage of additional samples from previously rejected. E.g. for binary class distribution 20-80 and `majority_left_threshold = 0.5`, majority class will be reduced to 50 samples `(20 + (80-20)*0.5)`.  Defaults to 0.0.
             randomize_A (float, optional): Randomization strength of the final output. 0.0 means lack of randomization. Defaults to 0.0.
             random_seed (int, optional): Random seed. Defaults to 42.
-            verbosity (logging.LogRecord, optional): Specifies the lowest-severity log message a logger will handle. Defaults to None (logging.WARNING).
+            verbosity (logging.LogRecord, optional): Specifies the lowest-severity log message a logger will handle. Defaults to logging.WARNING.
 
         Raises:
             ValueError: `majority_left_threshold` is out of expected range <0.0, 1.0).
