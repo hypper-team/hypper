@@ -1,10 +1,13 @@
-import pandas as pd
-import numpy as np
+import logging
 import sys
 
+import numpy as np
+import pandas as pd
 from bidict import bidict
+from scipy.sparse import csc_matrix, csr_matrix, diags
 from sklearn.preprocessing import OneHotEncoder
-from scipy.sparse import diags, csr_matrix, csc_matrix
+
+from .utils import BASE_LOGGING_LEVEL
 
 # TODO
 #  * caching mechanism for hypergraph weighting
@@ -18,19 +21,22 @@ class HyperGraph:
     """
 
     def __init__(
-        self, input_data: pd.DataFrame, label: str, random_seed=42, verbosity=None
+        self,
+        input_data: pd.DataFrame,
+        label: str,
+        random_seed: int = 42,
+        verbosity: logging.LogRecord = BASE_LOGGING_LEVEL,
     ):
         """
         Args:
             input_data (pandas.DataFrame): Input data.
             label (str, optional): Label column name.
             random_seed (int, optional): Random seed.
-            verbosity (int, optional): Value greater than 0 displays info about process progress. Defaults to None.
+            verbosity (logging.LogRecord, optional): Specifies the lowest-severity log message a logger will handle. Defaults to logging.WARNING.
 
         Raises:
             ValueError: Not recognized format of an input data.
         """
-
         if label == "class":
             raise ValueError(
                 "Label shouldn't be named `class` due to Pandas internal error"
@@ -40,24 +46,24 @@ class HyperGraph:
         self.X, self.y = input_data.drop(label, axis=1), input_data[label]
         self.random_seed = random_seed
         self.label = label
-        self.verbosity = verbosity
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(verbosity)
 
-        if self.verbosity:
-            print(f"Input file shape: {input_data.shape} ...")
-            print(
-                f"Input file in memory size: {sys.getsizeof(self.input_data)*0.000001} MB ..."
-            )
+        self.logger.info(f"Input data shape: {input_data.shape}.")
+        self.logger.info(
+            f"Input file in memory size: {sys.getsizeof(input_data)*1.00E-06:.3f} MB."
+        )
 
         if isinstance(input_data, pd.DataFrame):
             # Generates: self.incidence_matrix, self.edges, self.vertices
             self._create_hypergraph_representation()
-            if self.verbosity:
-                print("Created hypergraph-based data representation ...")
         else:
             raise ValueError("Not recognized input format.")
 
     def _create_hypergraph_representation(self):
         """Function generater hypergraph representation for the input data. This representation takes form of a incidence matrix and indices to vertices/hyperedges names mapping."""
+        self.logger.debug("Creating hypergraph-based data representation ...")
+
         ohe = OneHotEncoder(drop=None, sparse=True, handle_unknown="error")
         self.incidence_matrix = ohe.fit_transform(self.X.values)
         self.incidence_matrix.multiply(
@@ -76,6 +82,7 @@ class HyperGraph:
         self.edges_labels = bidict(
             zip(edges_labels_names, list(range(0, len(edges_labels_names))))
         )
+        self.logger.debug("Hypergraph-based data representation created.")
 
     def calculate_weights(
         self, iterations, normalization_strategy="max", iter_history=False
@@ -90,6 +97,8 @@ class HyperGraph:
         Returns:
             list: If `iter_history` is set to `True` returns list of tuples, where evry tuple consists of hyperedges and vertices weight matrices for subsequent iterations.
         """
+        self.logger.debug("Calculating class-dependent hypergraph weights ...")
+
         # Weights initialization basend on class distribution
         self.vertices_weights = self.vertices_weights.multiply(
             csr_matrix(
@@ -117,8 +126,7 @@ class HyperGraph:
                 iteration_history.append((self.edges_weights, self.vertices_weights))
         if iter_history:
             self.weighting_iteration_history = iteration_history
-        if self.verbosity:
-            print("Class-dependent weight calculated ...")
+        self.logger.debug("Class-dependent weights calculated.")
 
     def normalize(self, matrix: csc_matrix, normalization_strategy: str, axis: int):
         """Method implements three normalization strategies: `Max`, `L1`, and `L2`.

@@ -1,11 +1,12 @@
-from re import sub
-import numpy as np
-import pandas as pd
-
+import logging
 from copy import copy
 from random import random, seed
 
-from ..base import TransformerMixin, Base
+import numpy as np
+import pandas as pd
+
+from ..base import Base, TransformerMixin
+from ..utils import BASE_LOGGING_LEVEL
 
 
 class CDWU(Base, TransformerMixin):
@@ -23,7 +24,7 @@ class CDWU(Base, TransformerMixin):
         majority_left_threshold=0.0,
         randomize_A=0.0,
         random_seed=42,
-        verbosity=None,
+        verbosity: logging.LogRecord = BASE_LOGGING_LEVEL,
     ) -> None:
         """_summary_
 
@@ -41,7 +42,7 @@ class CDWU(Base, TransformerMixin):
             majority_left_threshold (float, optional): Parameter controlling precentage of additional samples from previously rejected. E.g. for binary class distribution 20-80 and `majority_left_threshold = 0.5`, majority class will be reduced to 50 samples `(20 + (80-20)*0.5)`.  Defaults to 0.0.
             randomize_A (float, optional): Randomization strength of the final output. 0.0 means lack of randomization. Defaults to 0.0.
             random_seed (int, optional): Random seed. Defaults to 42.
-            verbosity (bool, optional): Value greater than 0 displays info about process progress. Defaults to None.
+            verbosity (logging.LogRecord, optional): Specifies the lowest-severity log message a logger will handle. Defaults to None (logging.WARNING).
 
         Raises:
             ValueError: `majority_left_threshold` is out of expected range <0.0, 1.0).
@@ -60,6 +61,8 @@ class CDWU(Base, TransformerMixin):
 
         self.random_seed = random_seed
         self.verbosity = verbosity
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(verbosity)
 
     def _undersampling(
         self,

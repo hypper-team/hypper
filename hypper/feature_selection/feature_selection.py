@@ -1,11 +1,13 @@
+import logging
+from collections import Counter, defaultdict
+
 import numpy as np
 import pandas as pd
-
 from scipy.sparse import csr_matrix
-from collections import Counter, defaultdict
 from sklearn.preprocessing import OneHotEncoder
 
-from ..base import TransformerMixin, Base
+from ..base import Base, TransformerMixin
+from ..utils import BASE_LOGGING_LEVEL
 
 
 class BaseFS:
@@ -37,7 +39,7 @@ class CDWFS(BaseFS, Base, TransformerMixin):
         weighting_normalization_strategy="max",
         feature_values=True,
         random_seed=42,
-        verbosity=None,
+        verbosity: logging.LogRecord = BASE_LOGGING_LEVEL,
     ) -> None:
         """
         Args:
@@ -53,6 +55,8 @@ class CDWFS(BaseFS, Base, TransformerMixin):
 
         self.random_seed = random_seed
         self.verbosity = verbosity
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(verbosity)
 
     def _weight_based_fi(
         self,
@@ -60,6 +64,8 @@ class CDWFS(BaseFS, Base, TransformerMixin):
         weighting_normalization_strategy: str,
         feature_values: bool,
     ) -> pd.DataFrame:
+        self.logger.info("Calculating feature importances ...")
+
         self.hg.calculate_weights(
             iterations=weighting_iterations,
             normalization_strategy=weighting_normalization_strategy,
@@ -77,16 +83,14 @@ class CDWFS(BaseFS, Base, TransformerMixin):
                 "feature_importance": fis.toarray()[0],
             }
         ).set_index("feature_value")
-        if self.verbosity:
-            print("Feature-values importances calculated ...")
+
+        self.logger.info("Feature importances calculated.")
 
         if feature_values:
             return feature_value_importances
         else:
             # Return features importances
             feature_importances = self._modify_fi(feature_value_importances)
-            if self.verbosity:
-                print("Features importances calculated ...")
             return feature_importances
 
     def fit(self, data: pd.DataFrame, label_column: str):
@@ -139,7 +143,7 @@ class RandomWalkFS(BaseFS, Base, TransformerMixin):
         scoring_variant="v1_3",
         feature_values=True,
         random_seed=42,
-        verbosity=False,
+        verbosity: logging.LogRecord = BASE_LOGGING_LEVEL,
     ) -> None:
         """_summary_
 
@@ -161,6 +165,8 @@ class RandomWalkFS(BaseFS, Base, TransformerMixin):
 
         self.random_seed = random_seed
         self.verbosity = verbosity
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(verbosity)
 
     def _random_walk_based_fi(
         self,
@@ -169,6 +175,8 @@ class RandomWalkFS(BaseFS, Base, TransformerMixin):
         scoring_variant: str,
         feature_values: bool,
     ) -> pd.DataFrame:
+        self.logger.info("Calculating feature importances ...")
+
         ohe = OneHotEncoder(drop=None, sparse=True, handle_unknown="error")
         vertices_labels = ohe.fit_transform(self.hg.y.values.reshape(-1, 1))
 
@@ -276,16 +284,14 @@ class RandomWalkFS(BaseFS, Base, TransformerMixin):
                 "feature_importance": agg_score.values(),
             }
         ).set_index("feature_value")
-        if self.verbosity:
-            print("Feature-values importances calculated ...")
+
+        self.logger.info("Feature importances calculated.")
 
         if feature_values:
             return feature_value_importances
         else:
             # Return features importances
             feature_importances = self._modify_fi(feature_value_importances)
-            if self.verbosity:
-                print("Features importances calculated ...")
             return feature_importances
 
     def _rw_possible_steps(self, path_element, idx):

@@ -12,6 +12,5 @@ def test_requirements(requirements_path):
     # Test required packages availibility
     with open(requirements_path, "r") as f:
         reqs_from_file = pkg_resources.parse_requirements(f.read())
-    print(reqs_from_file)
     for req in reqs_from_file:
         pkg_resources.require(str(req))

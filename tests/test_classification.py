@@ -25,7 +25,6 @@ def test_CDWC(
             weighting_iterations=pgi["wi"],
             weighting_normalization_strategy=pgi["wns"],
             random_seed=42,
-            verbosity=False,
         )
         cdwc.fit(pgi["dfs"][0], label_column=pgi["dfs"][1])
         y_pred = cdwc.predict(pgi["dfs"][0].drop(pgi["dfs"][1], axis=1).head(3))
