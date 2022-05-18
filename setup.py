@@ -12,11 +12,10 @@ if sys.version_info < (3, 7):
     sys.exit("Hypper requires Python 3.7 or later.")
 
 # Parse requirements
-with pathlib.Path('requirements.txt').open() as requirements_txt:
+with pathlib.Path("requirements.txt").open() as requirements_txt:
     install_requires = [
         str(requirement)
-        for requirement
-        in pkg_resources.parse_requirements(requirements_txt)
+        for requirement in pkg_resources.parse_requirements(requirements_txt)
     ]
 
 # Setup build
@@ -48,6 +47,25 @@ setup(
         "testing": ["pytest"],
         "documentation": ["decorator>=5.1.1", "pdoc"],
         "develop": ["black"],
-        "all": ["decorator>=5.1.1", "pytest", "pdoc", "black"],
+        "benchmarking": [
+            "tqdm",
+            "pyyaml",
+            "imbalanced-learn",
+            "xgboost",
+            "catboost",
+            "lightgbm",
+        ],
+        "all": [
+            "decorator>=5.1.1",
+            "pytest",
+            "pdoc",
+            "black",
+            "tqdm",
+            "pyyaml",
+            "imbalanced-learn",
+            "xgboost",
+            "catboost",
+            "lightgbm",
+        ],
     },
 )

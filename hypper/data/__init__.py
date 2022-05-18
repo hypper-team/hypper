@@ -7,6 +7,7 @@ from .data_reader import read_banking
 from .data_reader import read_phishing
 from .data_reader import read_churn
 from .data_reader import read_hr
+from .data_reader import read_criteo
 
 __all__ = [
     "read_sample_data",
@@ -18,4 +19,5 @@ __all__ = [
     "read_phishing",
     "read_churn",
     "read_hr",
+    "read_criteo",
 ]

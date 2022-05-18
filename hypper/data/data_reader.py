@@ -1,14 +1,19 @@
 import io
+import logging
+from os import read
+import sys
+import tarfile
 from pathlib import Path
-from typing import Tuple, List
+from typing import List, Optional, Tuple
+from urllib.request import urlopen
 from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
-from urllib.request import urlopen
 from sklearn.model_selection import train_test_split
 
 DATAFILES_PREFIX = Path.home() / ".hypper"
+LOGGER = logging.getLogger(__name__)
 
 
 def _download_file(filepath: str, url: str) -> str:
@@ -21,6 +26,19 @@ def _download_file(filepath: str, url: str) -> str:
         zipfile.extractall(path=Path(DATAFILES_PREFIX))
     # Read dataset
     return filepath
+
+
+def _accept_download(question: str, default: str = "yes") -> bool:
+    valid = {"yes": True, "y": True, "ye": True, "no": False, "n": False}
+    while True:
+        sys.stdout.write(question + " [Y/n] ")
+        choice = input().lower()
+        if default is not None and choice == "":
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            sys.stdout.write("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
 
 
 def read_sample_data() -> Tuple[pd.DataFrame, str, List[str]]:
@@ -256,16 +274,37 @@ def read_congressional_voting_records() -> Tuple[pd.DataFrame, str, List[str]]:
     )
 
 
-def _read_criteo(nrows=1000000, size=0.1) -> Tuple[pd.DataFrame, str, List[str]]:
+def read_criteo(
+    nrows: Optional[int] = 1000000, size: Optional[float] = 0.1
+) -> Tuple[pd.DataFrame, str, List[str]]:
     """Loads `Criteo Sponsored Search Conversion Log Dataset`.
 
     **Dataset**: https://ailab.criteo.com/criteo-sponsored-search-conversion-log-dataset/
 
+    Args:
+        nrows (Optional[int], optional): Read n first rows from file. Defaults to 1000000.
+        size (Optional[float], optional): Select percentage of rows with respect to classes distribution. Defaults to 0.1.
+
     Returns:
         Tuple[pd.DataFrame, str, list]: Tuple with DataFrame object, label column name and list of categorical columns.
     """
+
+    filepath = Path(DATAFILES_PREFIX / "criteo")
+    url = "http://go.criteo.net/criteo-research-search-conversion.tar.gz"
+    if not filepath.exists():
+        LOGGER.warning(
+            "Compressed Criteo dataset size is ~2GB. When uncompressed, Criteo will take ~6.4GB of yor disk space."
+        )
+        if _accept_download("Do you want to continue downloading?"):
+            LOGGER.warning("Downloading Criteo dataset. It may take a few minutes ...")
+            filepath.mkdir(parents=True, exist_ok=True)
+            with tarfile.open(fileobj=io.BytesIO(urlopen(url).read())) as tar:
+                tar.extractall(path=filepath)
+        else:
+            return
+
     df = pd.read_csv(
-        "data/criteo/CriteoSearchData",
+        filepath / "Criteo_Conversion_Search" / "CriteoSearchData",
         delimiter="\t",
         names=[
             "Sale",

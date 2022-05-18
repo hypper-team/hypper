@@ -8,7 +8,7 @@ from time import time
 from functools import wraps
 
 
-BASE_LOGGING_LEVEL = logging.DEBUG
+BASE_LOGGING_LEVEL = logging.WARNING
 
 
 def grouped(iterable: List[Any], n: int):
