@@ -47,6 +47,7 @@ setup(
     extras_require={
         "testing": ["pytest"],
         "documentation": ["decorator>=5.1.1", "pdoc"],
-        "all": ["decorator>=5.1.1", "pytest", "pdoc", "autopep8"],
+        "develop": ["black"],
+        "all": ["decorator>=5.1.1", "pytest", "pdoc", "black"],
     },
 )
