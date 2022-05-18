@@ -1,8 +1,11 @@
-import pandas as pd
+import logging
+
 import numpy as np
+import pandas as pd
+from sklearn.preprocessing import OneHotEncoder
 
 from ..base import Base, PredictorMixin
-from sklearn.preprocessing import OneHotEncoder
+from ..utils import BASE_LOGGING_LEVEL
 
 
 class CDWC(Base, PredictorMixin):
@@ -17,7 +20,7 @@ class CDWC(Base, PredictorMixin):
         weighting_iterations: int,
         weighting_normalization_strategy="max",
         random_seed=42,
-        verbosity=None,
+        verbosity: logging.LogRecord = BASE_LOGGING_LEVEL,
     ) -> None:
         """
         Args:
@@ -31,6 +34,8 @@ class CDWC(Base, PredictorMixin):
 
         self.random_seed = random_seed
         self.verbosity = verbosity
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(verbosity)
 
     def fit(self, data: pd.DataFrame, label_column: str):
         """Fit data into classifier.

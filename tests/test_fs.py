@@ -26,7 +26,6 @@ def test_CDWFS(
             weighting_normalization_strategy=pgi["wns"],
             feature_values=feature_values,
             random_seed=42,
-            verbosity=False,
         )
         out = cdwfs.fit_transform(pgi["dfs"][0], label_column=pgi["dfs"][1])
         assert out.size != 0

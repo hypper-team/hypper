@@ -34,7 +34,6 @@ def test_CDWU(
             weighting_normalization_strategy=pgi["wns"],
             majority_left_threshold=pgi["mlt"],
             random_seed=42,
-            verbosity=False,
         )
         out = cdwu.fit_transform(pgi["dfs"][0], label_column=pgi["dfs"][1])
         assert out.size != 0

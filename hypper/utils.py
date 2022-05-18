@@ -1,10 +1,14 @@
 import os
 import pickle
 import psutil
+import logging
 
 from typing import List, Any
 from time import time
 from functools import wraps
+
+
+BASE_LOGGING_LEVEL = logging.DEBUG
 
 
 def grouped(iterable: List[Any], n: int):
