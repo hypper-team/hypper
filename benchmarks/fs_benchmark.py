@@ -29,7 +29,7 @@ from tqdm import tqdm
 from xgboost import XGBClassifier
 
 warnings.filterwarnings("ignore", category=ConvergenceWarning)
-warnings.filterwarnings('ignore', category=UserWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 from base_benchmark import BaseBenchmark
 
