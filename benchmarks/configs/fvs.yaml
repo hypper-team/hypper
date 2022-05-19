@@ -1,0 +1,27 @@
+read_functions:
+  - read_german_data
+  - read_spect_heart
+  - read_banking
+  - read_hr
+  - read_criteo
+param_grid:
+  - method: [hypper_weights]
+    weighting_iterations: [1, 2, 3]
+    weighting_normalization_strategy: [max, l1, l2]
+    feature_values: [true]
+  - method: [hypper_rw]
+    iterations: [10000]
+    walk_length: [3]
+    scoring_variant: ['v1_1', 'v1_2', 'v1_3', 'v1_4']
+    feature_values: [true]
+  - method: [random_forest, logistic_regression, random]
+savefile: "fv_selection_exp.csv"
+percent_of_features: [0.3, 0.5]
+feature_values: true
+kfold_splits: 5
+eval_algorithms:
+  - LogisticRegression
+  - XGBClassifier
+  - MLPClassifier
+  - CatBoostClassifier
+  - LGBMClassifier

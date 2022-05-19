@@ -1,8 +1,13 @@
-import pandas as pd
-import numpy as np
+import logging
+from typing import Optional
 
-from .base import Base, PredictorMixin
+import numpy as np
+import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
+
+from ..base import Base, PredictorMixin
+from ..utils import BASE_LOGGING_LEVEL
+
 
 class CDWC(Base, PredictorMixin):
     """Hypergraph-based binary classifier.
@@ -10,19 +15,28 @@ class CDWC(Base, PredictorMixin):
     Classifier is based on the hypergraph class-dependent weighting method.
 
     """
-    def __init__(self, weighting_iterations: int, weighting_normalization_strategy='max', random_seed=42, verbosity=None) -> None:
+
+    def __init__(
+        self,
+        weighting_iterations: int,
+        weighting_normalization_strategy: str = "max",
+        random_seed: Optional[int] = 42,
+        verbosity: Optional[logging.LogRecord] = BASE_LOGGING_LEVEL,
+    ) -> None:
         """
         Args:
             weighting_iterations (int): Number of weighting iterations during hypergraph class-dependent weighting method.
             weighting_normalization_strategy (str, optional): Type of normalization during hypergraph class-dependent weighting method. Defaults to 'max'. Options: 'max', 'l1', 'l2'.
             random_seed (int, optional): Random seed. Defaults to 42.
-            verbosity (int, optional): Value greater than 0 displays info about the trainign process. Defaults to None.
+            verbosity (logging.LogRecord, optional): Specifies the lowest-severity log message a logger will handle. Defaults to logging.WARNING.
         """
         self.weighting_iterations = weighting_iterations
         self.weighting_normalization_strategy = weighting_normalization_strategy
 
         self.random_seed = random_seed
         self.verbosity = verbosity
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(verbosity)
 
     def fit(self, data: pd.DataFrame, label_column: str):
         """Fit data into classifier.
@@ -35,7 +49,10 @@ class CDWC(Base, PredictorMixin):
             self
         """
         super().fit(data, label_column)
-        self.hg.calculate_weights(iterations=self.weighting_iterations, normalization_strategy=self.weighting_normalization_strategy)
+        self.hg.calculate_weights(
+            iterations=self.weighting_iterations,
+            normalization_strategy=self.weighting_normalization_strategy,
+        )
         return self
 
     def _modify_fi(self, fi: pd.DataFrame) -> pd.DataFrame:
@@ -76,27 +93,38 @@ class CDWC(Base, PredictorMixin):
         feature_value_weights = pd.DataFrame(
             data=self.hg.edges_weights.todense().T,
             columns=list(range(len(self.hg.edges_labels))),
-            index=self.hg.edges.keys())
+            index=self.hg.edges.keys(),
+        )
         feature_weights = self._modify_fi(feature_value_weights)
 
         def calculate_score(row):
             try:
-                feature_value_pairs = OneHotEncoder(drop = None, sparse=True, handle_unknown='error').fit(row.values.reshape(1, -1)).get_feature_names_out(self.hg.X.columns)
+                feature_value_pairs = (
+                    OneHotEncoder(drop=None, sparse=True, handle_unknown="error")
+                    .fit(row.values.reshape(1, -1))
+                    .get_feature_names_out(self.hg.X.columns)
+                )
             except ValueError as ve:
-                raise ValueError("Number of features does not match input data").with_traceback(ve.__traceback__)
+                raise ValueError(
+                    "Number of features does not match input data"
+                ).with_traceback(ve.__traceback__)
 
-            score_per_class = np.zeros((len(self.hg.edges_labels), ))
+            score_per_class = np.zeros((len(self.hg.edges_labels),))
 
             for fv in feature_value_pairs:
                 try:
-                    score_per_class += self.hg.edges_weights.getcol(self.hg.edges[fv]).todense().A1
+                    score_per_class += (
+                        self.hg.edges_weights.getcol(self.hg.edges[fv]).todense().A1
+                    )
                 except KeyError:
                     feature = next(p for p in self.hg.X.columns if p in fv)
-                    score_per_class += feature_weights.loc[feature_weights.index == feature].values[0]
-            
+                    score_per_class += feature_weights.loc[
+                        feature_weights.index == feature
+                    ].values[0]
+
             return score_per_class
 
-        return X.apply(calculate_score, axis=1, result_type='expand').values
+        return X.apply(calculate_score, axis=1, result_type="expand").values
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         """Method returns class predictions.
@@ -119,4 +147,4 @@ class CDWC(Base, PredictorMixin):
             np.ndarray: Array with predicted probabilities for classes.
         """
         X = self.classifier(X)
-        return X/X.sum(axis=1)[:,None]
+        return X / X.sum(axis=1)[:, None]

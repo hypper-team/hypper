@@ -9,30 +9,26 @@ Hypper provides an easy-to-use interface familiar to well-recognized Scikit-Lear
 The primary goal of this library is to provide a tool for handling datasets consisting of mainly categorical features. Novel hypergraph-based methods proposed in the Hypper library were benchmarked against the alternative solutions and achieved satisfactory results. More details can be found in scientific papers presented in the section below.
 
 ## Installation
-Minimal installation
 ```
 pip install hypper
 ```
-Installation with documentation
+Local installations
+* Installation with documentation
 ```
 pip install -e .['documentation']
 ```
-Installation with tests
+* Installation with tests
 ```
 pip install -e .['testing']
 ```
-Install everything
+* Install everything
 ```
 pip install -e .['all']
 ```
-## Usage
-#### Undersampling
-#### Feature Selection
 
-#### Tutorials:
-* Undersampling
-* Feature Selection
-* Classification
+## Tutorials:
+[![](https://colab.research.google.com/assets/colab-badge.svg)  1. Introduction to data mining with Hypper](https://colab.research.google.com/drive/1JntX8z3-e0qhCSjxpjYnPmfR2Iy09e15?usp=sharing)
+
 ## Testing
 ```
 pytest
@@ -41,7 +37,7 @@ pytest
 * Source code - [https://github.com/hypper-team/hypper](https://github.com/hypper-team/hypper)
 * Documentation - [https://hypper-team.github.io/hypper.html](https://hypper-team.github.io/hypper.html)
 
-### Citation
+## Citation
 
-### Related articles
+## Related articles
 * 

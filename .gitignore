@@ -1,5 +1,6 @@
 # Project
 .vscode/
+benchmarks/results_df/
 # requirements.txt
 
 # Inlude zipped datasets only
