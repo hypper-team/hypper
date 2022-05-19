@@ -1,9 +1,9 @@
 read_functions:
   - read_german_data
-  # - read_spect_heart
-  # - read_banking
-  # - read_hr
-  # - read_criteo
+  - read_spect_heart
+  - read_banking
+  - read_hr
+  - read_criteo
 param_grid:
   - method: [hypper_weights]
     weighting_iterations: [1, 2, 3]
@@ -21,7 +21,7 @@ feature_values: true
 kfold_splits: 5
 eval_algorithms:
   - LogisticRegression
-  # - XGBClassifier
-  # - MLPClassifier
-  # - CatBoostClassifier
-  # - LGBMClassifier
+  - XGBClassifier
+  - MLPClassifier
+  - CatBoostClassifier
+  - LGBMClassifier
