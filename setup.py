@@ -5,7 +5,7 @@ from pathlib import Path
 import pkg_resources
 from setuptools import setup
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 # Check Python version
 if sys.version_info < (3, 7):
