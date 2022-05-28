@@ -2,6 +2,7 @@
 .vscode/
 benchmarks/results_df/
 # requirements.txt
+catboost_info/
 
 # Inlude zipped datasets only
 data/*
