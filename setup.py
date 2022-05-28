@@ -4,7 +4,7 @@ import sys
 import pkg_resources
 from setuptools import setup
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 # Check Python version
 if sys.version_info < (3, 7):
