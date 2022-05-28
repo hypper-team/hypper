@@ -230,9 +230,9 @@ class FeatureSelectionBenchmark(BaseBenchmark):
                             else:
                                 temp_cat_cols = [i for i in cat_cols if i in n_features]
                             for col in temp_cat_cols:
-                                X_train_n_features[col] = X_train_n_features[col].astype(
-                                    int, copy=False
-                                )
+                                X_train_n_features[col] = X_train_n_features[
+                                    col
+                                ].astype(int, copy=False)
                                 X_test_n_features[col] = X_test_n_features[col].astype(
                                     int, copy=False
                                 )
@@ -256,7 +256,9 @@ class FeatureSelectionBenchmark(BaseBenchmark):
                                 clf.fit(X_train_n_features.values, y_train)
                             # Evaluate results - test
                             y_pred_test = clf.predict(X_test_n_features)
-                            y_pred_prob_test = clf.predict_proba(X_test_n_features)[:, 1]
+                            y_pred_prob_test = clf.predict_proba(X_test_n_features)[
+                                :, 1
+                            ]
                             y_true_test = y_test
                             # Evaluate results - val
                             y_pred_val = clf.predict(X_val_n_features)

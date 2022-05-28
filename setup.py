@@ -4,7 +4,7 @@ import sys
 import pkg_resources
 from setuptools import setup
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 # Check Python version
 if sys.version_info < (3, 7):
@@ -13,7 +13,14 @@ if sys.version_info < (3, 7):
 # Setup build
 setup(
     name="hypper",
-    packages=["hypper"],
+    packages=[
+        "hypper",
+        "hypper.classification",
+        "hypper.data",
+        "hypper.feature_selection",
+        "hypper.plotting",
+        "hypper.undersampling",
+    ],
     version=__version__,
     author="Szymon Janowski, Paweł Misiorek",
     author_email="szy.janowski@gmail.com, pawel.misiorek@put.poznan.pl",
@@ -43,6 +50,7 @@ setup(
     ],
     long_description=(pathlib.Path(__file__).parent / "README.md").read_text(),
     long_description_content_type="text/markdown",
+    package_data={"hypper": ["logger.conf"]},
     extras_require={
         "documentation": ["decorator>=5.1.1", "pdoc"],
         "develop": ["pytest", "black"],
