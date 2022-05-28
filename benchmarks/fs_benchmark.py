@@ -143,7 +143,7 @@ class FeatureSelectionBenchmark(BaseBenchmark):
                     np.hstack((X_train, np.expand_dims(y_train, axis=1))),
                     columns=X_train_columns,
                 )
-                X_train_columns = X_train_columns[:-1]  # Without label
+                X_train_columns = X_train_columns[:-1]  # Without label for OHE
                 # Apply OHE
                 if self.feature_values:
                     ohe = OneHotEncoder(drop=None, sparse=True, handle_unknown="ignore")
@@ -202,18 +202,27 @@ class FeatureSelectionBenchmark(BaseBenchmark):
                             X_val = np.nan_to_num(X_val)
                             X_val = sparse.csr_matrix(X_val)
                         # Create dataset with selected features
-                        ## Test
-                        df_test = pd.DataFrame.sparse.from_spmatrix(
-                            X_test, columns=X_train_columns
+                        ## Train
+                        df_train_selected_cols = pd.DataFrame.sparse.from_spmatrix(
+                            X_train, columns=X_train_columns
                         )  # When X_test will be modified with OHE data leak occures
                         # (with X_train, otherwise non recognized values occur)
                         n_features = df_fs_results_n_features.index.tolist()
-                        X_test_n_features = copy(df_test[n_features])
-                        ## Val
+                        # if self.feature_values:
+                        #     df_train = pd.DataFrame.sparse.from_spmatrix(
+                        #         X_train, columns=X_train_columns
+                        #     )
+                        X_train_n_features = copy(df_train_selected_cols[n_features])
+                        ## Val & test
                         df_val = pd.DataFrame.sparse.from_spmatrix(
                             X_val, columns=X_train_columns
                         )
                         X_val_n_features = copy(df_val[n_features])
+
+                        df_test = pd.DataFrame.sparse.from_spmatrix(
+                            X_test, columns=X_train_columns
+                        )
+                        X_test_n_features = copy(df_test[n_features])
                         # Eval on all predefined classifiers
                         for classifier_name, clf in self.eval_algorithms:
                             if self.feature_values:
@@ -221,6 +230,9 @@ class FeatureSelectionBenchmark(BaseBenchmark):
                             else:
                                 temp_cat_cols = [i for i in cat_cols if i in n_features]
                             for col in temp_cat_cols:
+                                X_train_n_features[col] = X_train_n_features[col].astype(
+                                    int, copy=False
+                                )
                                 X_test_n_features[col] = X_test_n_features[col].astype(
                                     int, copy=False
                                 )
@@ -230,38 +242,23 @@ class FeatureSelectionBenchmark(BaseBenchmark):
                             # Train classifier - test
                             if classifier_name == "catboost":
                                 clf.fit(
-                                    X_test_n_features,
-                                    y_test,
+                                    X_train_n_features,
+                                    y_train,
                                     cat_features=temp_cat_cols,
                                 )
                             elif classifier_name == "lightgbm":
                                 clf.fit(
-                                    X_test_n_features,
-                                    y_test,
+                                    X_train_n_features,
+                                    y_train,
                                     categorical_feature=temp_cat_cols,
                                 )
                             else:
-                                clf.fit(X_test_n_features.values, y_test)
-                            # Evaluate results
+                                clf.fit(X_train_n_features.values, y_train)
+                            # Evaluate results - test
                             y_pred_test = clf.predict(X_test_n_features)
-                            y_pred_prob_test = clf.predict_proba(X_test_n_features)[
-                                :, 1
-                            ]
+                            y_pred_prob_test = clf.predict_proba(X_test_n_features)[:, 1]
                             y_true_test = y_test
-                            # Train classifier - val
-                            if classifier_name == "catboost":
-                                clf.fit(
-                                    X_val_n_features, y_val, cat_features=temp_cat_cols
-                                )
-                            elif classifier_name == "lightgbm":
-                                clf.fit(
-                                    X_val_n_features,
-                                    y_val,
-                                    categorical_feature=temp_cat_cols,
-                                )
-                            else:
-                                clf.fit(X_val_n_features.values, y_val)
-                            # Evaluate results
+                            # Evaluate results - val
                             y_pred_val = clf.predict(X_val_n_features)
                             y_pred_prob_val = clf.predict_proba(X_val_n_features)[:, 1]
                             y_true_val = y_val
