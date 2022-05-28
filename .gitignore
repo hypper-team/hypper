@@ -1,6 +1,7 @@
 # Project
 .vscode/
 benchmarks/results_df/
+benchmarks/results_plots/
 # requirements.txt
 catboost_info/
 
