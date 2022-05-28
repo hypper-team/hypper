@@ -1,9 +1,10 @@
 read_functions:
   - read_german_data
   - read_spect_heart
-  - read_banking
+  - read_breast_cancer_data
+  - read_congressional_voting_records
+  - read_phishing
   - read_hr
-  - read_criteo
 param_grid:
   - method: [hypper_weights]
     weighting_iterations: [1, 2, 3]
@@ -18,10 +19,10 @@ param_grid:
 savefile: "f_selection_exp.csv"
 percent_of_features: [0.3, 0.5]
 feature_values: false
-kfold_splits: 5
+kfold_splits: 3
 eval_algorithms:
   - LogisticRegression
-  - XGBClassifier
+  # - XGBClassifier
   - MLPClassifier
   - CatBoostClassifier
   - LGBMClassifier
