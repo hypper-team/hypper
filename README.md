@@ -20,7 +20,7 @@ pip install -e .['benchmarking'] # benchmarking scripts
 pip install -e .['all'] # install everything
 ```
 
-## Tutorials:
+## Tutorials
 [![](https://colab.research.google.com/assets/colab-badge.svg)  1. Introduction to data mining with Hypper](https://colab.research.google.com/drive/1JntX8z3-e0qhCSjxpjYnPmfR2Iy09e15?usp=sharing)
 
 ## Testing
