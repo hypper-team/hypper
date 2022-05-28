@@ -31,7 +31,7 @@ setup(
         "bidict>=0.22.0",
         "psutil>=5.9.0",
         "hypernetx>=1.2.3",
-        "requests>=2.27.1",
+        "requests>=2.23.0",
     ],
     classifiers=[
         "Programming Language :: Python :: 3.7",
@@ -44,9 +44,8 @@ setup(
     long_description=(pathlib.Path(__file__).parent / "README.md").read_text(),
     long_description_content_type="text/markdown",
     extras_require={
-        "testing": ["pytest"],
         "documentation": ["decorator>=5.1.1", "pdoc"],
-        "develop": ["black"],
+        "develop": ["pytest", "black"],
         "benchmarking": [
             "tqdm",
             "pyyaml",
