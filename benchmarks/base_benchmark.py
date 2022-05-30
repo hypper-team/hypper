@@ -31,7 +31,7 @@ class BaseBenchmark:
         ]
 
     def save(self, df):
-        Path(self.savefile).mkdir(parents=True, exist_ok=True)
+        Path(self.savefile).parent.mkdir(parents=True, exist_ok=True)
         df.to_csv(Path(self.savefile))
 
     def _cat_oe(self, data: pd.DataFrame, cat_cols: List[str]):

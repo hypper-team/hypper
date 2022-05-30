@@ -1,16 +1,12 @@
 import warnings
+from collections import Counter
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from catboost import CatBoostClassifier
 from hypper.undersampling import CDWU
-from imblearn.under_sampling import (
-    EditedNearestNeighbours,
-    NearMiss,
-    RandomUnderSampler,
-    TomekLinks,
-)
+from imblearn.under_sampling import EditedNearestNeighbours, NearMiss, RandomUnderSampler, TomekLinks
 from lightgbm import LGBMClassifier
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import LogisticRegression
@@ -42,15 +38,11 @@ class UndersamplingBenchmark(BaseBenchmark):
             verbosity=self.config["verbosity"],
         )
         self.kfold_splits = self.config["kfold_splits"]
-        self.skfold = StratifiedKFold(
-            n_splits=self.kfold_splits, shuffle=True, random_state=self.random_seed
-        )
+        self.skfold = StratifiedKFold(n_splits=self.kfold_splits, shuffle=True, random_state=self.random_seed)
         self.eval_algorithms = []
         for ea in self.config["eval_algorithms"]:
             if ea == "LogisticRegression":
-                clf = LogisticRegression(
-                    random_state=self.random_seed, class_weight="balanced"
-                )
+                clf = LogisticRegression(random_state=self.random_seed, class_weight="balanced")
             elif ea == "XGBClassifier":
                 clf = XGBClassifier(
                     random_state=self.random_seed,
@@ -101,9 +93,7 @@ class UndersamplingBenchmark(BaseBenchmark):
             X, y = dataset.drop(label, axis=1).values, dataset[label].values
             y = self._cat_le(y)
             # For every fold in KFolds
-            for split_train, split_test in tqdm(
-                self.skfold.split(X, y), total=self.kfold_splits
-            ):
+            for split_train, split_test in tqdm(self.skfold.split(X, y), total=self.kfold_splits):
                 # Prepare data for particular fold
                 np.random.seed(self.random_seed)
                 np.random.shuffle(split_test)
@@ -141,9 +131,7 @@ class UndersamplingBenchmark(BaseBenchmark):
                             ),
                             label,
                             weighting_iteration=params["weighting_iteration"],
-                            weighting_normalization_strategy=params[
-                                "weighting_normalization_strategy"
-                            ],
+                            weighting_normalization_strategy=params["weighting_normalization_strategy"],
                             majority_left_threshold=params["majority_left_threshold"],
                             weighting_history=params["weighting_history"],
                             version=params["version"],
@@ -153,34 +141,24 @@ class UndersamplingBenchmark(BaseBenchmark):
                         try:
                             X_train = np.nan_to_num(X_train)  # Default to 0.0
                             if params["method"] == "without_undersampling":
-                                X_resampled, y_resampled = self._without_undersampling(
-                                    X_train, y_train
-                                )
+                                X_resampled, y_resampled = self._without_undersampling(X_train, y_train)
                             elif params["method"] == "random_undersampling":
                                 X_resampled, y_resampled = self._random_undersampling(
-                                    X_train, y_train
+                                    X_train, y_train, params["majority_left_threshold"]
                                 )
                             elif params["method"] == "tomek_links":
-                                X_resampled, y_resampled = self._tomek_links(
-                                    X_train, y_train
-                                )
+                                X_resampled, y_resampled = self._tomek_links(X_train, y_train)
                             elif params["method"] == "near_miss":
-                                X_resampled, y_resampled = self._near_miss(
-                                    X_train, y_train, params["version"]
-                                )
+                                X_resampled, y_resampled = self._near_miss(X_train, y_train, params["version"])
                             elif params["method"] == "edited_nearest_neighbours":
                                 (
                                     X_resampled,
                                     y_resampled,
                                 ) = self._edited_nearest_neighbours(X_train, y_train)
                             else:
-                                raise Exception(
-                                    f"Unrecognized method name: {params['method']}"
-                                )
+                                raise Exception(f"Unrecognized method name: {params['method']}")
                         except MemoryError as me:
-                            warnings.warn(
-                                f"{params['method']} could not handle data size - {me}"
-                            )
+                            warnings.warn(f"{params['method']} could not handle data size - {me}")
                             continue
                     # Eval on all predefined classifiers
                     for classifier_name, clf in self.eval_algorithms:
@@ -188,21 +166,15 @@ class UndersamplingBenchmark(BaseBenchmark):
                         if classifier_name == "catboost":
                             X_resampled = pd.DataFrame(
                                 X_resampled,
-                                columns=[
-                                    col for col in dataset.columns if col != label
-                                ],
+                                columns=[col for col in dataset.columns if col != label],
                             )
                             clf.fit(X_resampled, y_resampled, cat_features=cat_cols)
                         elif classifier_name == "lightgbm":
                             X_resampled = pd.DataFrame(
                                 X_resampled,
-                                columns=[
-                                    col for col in dataset.columns if col != label
-                                ],
+                                columns=[col for col in dataset.columns if col != label],
                             )
-                            clf.fit(
-                                X_resampled, y_resampled, categorical_feature=cat_cols
-                            )
+                            clf.fit(X_resampled, y_resampled, categorical_feature=cat_cols)
                         else:
                             clf.fit(X_resampled, y_resampled)
                         # Evaluate results
@@ -215,9 +187,7 @@ class UndersamplingBenchmark(BaseBenchmark):
                         y_pred_prob_val = clf.predict_proba(X_val)[:, 1]
                         y_true_val = y_val
                         if self.verbosity:
-                            print(
-                                f"{classifier_name}: {roc_auc_score(y_true_test, y_pred_prob_test)}"
-                            )
+                            print(f"{classifier_name}: {roc_auc_score(y_true_test, y_pred_prob_test)}")
                         # Append results
                         df_out = pd.concat(
                             [
@@ -230,27 +200,17 @@ class UndersamplingBenchmark(BaseBenchmark):
                                             classifier_name,
                                             params,
                                             accuracy_score(y_true_val, y_pred_val),
-                                            balanced_accuracy_score(
-                                                y_true_val, y_pred_val
-                                            ),
+                                            balanced_accuracy_score(y_true_val, y_pred_val),
                                             roc_auc_score(y_true_val, y_pred_prob_val),
                                             precision_score(y_true_val, y_pred_val),
-                                            average_precision_score(
-                                                y_true_val, y_pred_prob_val
-                                            ),
+                                            average_precision_score(y_true_val, y_pred_prob_val),
                                             recall_score(y_true_val, y_pred_val),
                                             f1_score(y_true_val, y_pred_val),
                                             accuracy_score(y_true_test, y_pred_test),
-                                            balanced_accuracy_score(
-                                                y_true_test, y_pred_test
-                                            ),
-                                            roc_auc_score(
-                                                y_true_test, y_pred_prob_test
-                                            ),
+                                            balanced_accuracy_score(y_true_test, y_pred_test),
+                                            roc_auc_score(y_true_test, y_pred_prob_test),
                                             precision_score(y_true_test, y_pred_test),
-                                            average_precision_score(
-                                                y_true_test, y_pred_prob_test
-                                            ),
+                                            average_precision_score(y_true_test, y_pred_prob_test),
                                             recall_score(y_true_test, y_pred_test),
                                             f1_score(y_true_test, y_pred_test),
                                         ]
@@ -289,10 +249,17 @@ class UndersamplingBenchmark(BaseBenchmark):
     def _without_undersampling(self, X_train, y_train):
         return X_train, y_train
 
-    def _random_undersampling(self, X_train, y_train):
-        return RandomUnderSampler(
-            random_state=self.random_seed, sampling_strategy=1.0
-        ).fit_resample(X_train, y_train)
+    def _random_undersampling(self, X_train, y_train, ratio):
+        original_distribution = Counter(y_train)
+        majority_samples, minority_samples = max(original_distribution.values()), min(original_distribution.values())
+        samples_diff = majority_samples - minority_samples
+        new_ratio = {
+            k: (majority_samples-int(min(samples_diff, samples_diff - np.ceil(samples_diff * ratio))) if v == majority_samples else v)
+            for k, v in original_distribution.items()
+        }
+        return RandomUnderSampler(random_state=self.random_seed, sampling_strategy=new_ratio).fit_resample(
+            X_train, y_train
+        )
 
     def _tomek_links(self, X_train, y_train):
         return TomekLinks(n_jobs=-1).fit_resample(X_train, y_train)

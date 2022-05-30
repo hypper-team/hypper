@@ -8,19 +8,21 @@ param_grid:
   - method: [hypper]
     weighting_iteration: [1, 2, 3]
     weighting_normalization_strategy: [max, l1, l2]
-    majority_left_threshold: [0.0, 0.5]
+    majority_left_threshold: [0.0, 0.5, 0.7]
     weighting_history: [true, false]
     version: [1, 5]
     randomize_A: [0.0, 5.0, 15.0, 40.0]
-  - method: [without_undersampling, random_undersampling, tomek_links, edited_nearest_neighbours]
+  - method: [without_undersampling, tomek_links, edited_nearest_neighbours]
+  - method: [random_undersampling]
+    majority_left_threshold: [0.0, 0.5, 0.7]
   - method: [near_miss]
     version: [1, 2]
 savefile: "undersampling_exp.csv"
 verbosity: false
-kfold_splits: 5
+kfold_splits: 3
 eval_algorithms:
   - LogisticRegression
-  - XGBClassifier
+  # - XGBClassifier
   - MLPClassifier
   - CatBoostClassifier
   - LGBMClassifier
