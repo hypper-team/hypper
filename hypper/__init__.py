@@ -12,16 +12,18 @@ logging.config.fileConfig(
     disable_existing_loggers=False,
 )
 
-from hypper.classification import *
-from hypper.data import *
-from hypper.feature_selection import *
-from hypper.plotting import *
-from hypper.undersampling import *
+from .classification import *
+from .data import *
+from .feature_selection import *
+from .plotting import *
+from .undersampling import *
 
 __all__ = [
-    "hypper.classification",
-    "hypper.data",
-    "hypper.feature_selection",
-    "hypper.plotting",
-    "hypper.undersampling",
+    "base",
+    "hypergraph",
+    "feature_selection",
+    "undersampling",
+    "classification",
+    "data",
+    "plotting",
 ]

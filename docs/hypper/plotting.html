@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="pdoc 12.0.0"/>
-    <title>hypper.utils API documentation</title>
+    <title>hypper.plotting API documentation</title>
             <link rel="icon" href="https://github.com/hypper-team/hypper/raw/main/logo/favicon.png"/>
 
     <style>/*! * Bootstrap Reboot v5.0.0 (https://getbootstrap.com/) * Copyright 2011-2021 The Bootstrap Authors * Copyright 2011-2021 Twitter, Inc. * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE) * Forked from Normalize.css, licensed MIT (https://github.com/necolas/normalize.css/blob/master/LICENSE.md) */*,::after,::before{box-sizing:border-box}@media (prefers-reduced-motion:no-preference){:root{scroll-behavior:smooth}}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;background-color:#fff;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}hr{margin:1rem 0;color:inherit;background-color:currentColor;border:0;opacity:.25}hr:not([size]){height:1px}h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem;font-weight:500;line-height:1.2}h1{font-size:calc(1.375rem + 1.5vw)}@media (min-width:1200px){h1{font-size:2.5rem}}h2{font-size:calc(1.325rem + .9vw)}@media (min-width:1200px){h2{font-size:2rem}}h3{font-size:calc(1.3rem + .6vw)}@media (min-width:1200px){h3{font-size:1.75rem}}h4{font-size:calc(1.275rem + .3vw)}@media (min-width:1200px){h4{font-size:1.5rem}}h5{font-size:1.25rem}h6{font-size:1rem}p{margin-top:0;margin-bottom:1rem}abbr[data-bs-original-title],abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}address{margin-bottom:1rem;font-style:normal;line-height:inherit}ol,ul{padding-left:2rem}dl,ol,ul{margin-top:0;margin-bottom:1rem}ol ol,ol ul,ul ol,ul ul{margin-bottom:0}dt{font-weight:700}dd{margin-bottom:.5rem;margin-left:0}blockquote{margin:0 0 1rem}b,strong{font-weight:bolder}small{font-size:.875em}mark{padding:.2em;background-color:#fcf8e3}sub,sup{position:relative;font-size:.75em;line-height:0;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}a{color:#0d6efd;text-decoration:underline}a:hover{color:#0a58ca}a:not([href]):not([class]),a:not([href]):not([class]):hover{color:inherit;text-decoration:none}code,kbd,pre,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:1em;direction:ltr;unicode-bidi:bidi-override}pre{display:block;margin-top:0;margin-bottom:1rem;overflow:auto;font-size:.875em}pre code{font-size:inherit;color:inherit;word-break:normal}code{font-size:.875em;color:#d63384;word-wrap:break-word}a>code{color:inherit}kbd{padding:.2rem .4rem;font-size:.875em;color:#fff;background-color:#212529;border-radius:.2rem}kbd kbd{padding:0;font-size:1em;font-weight:700}figure{margin:0 0 1rem}img,svg{vertical-align:middle}table{caption-side:bottom;border-collapse:collapse}caption{padding-top:.5rem;padding-bottom:.5rem;color:#6c757d;text-align:left}th{text-align:inherit;text-align:-webkit-match-parent}tbody,td,tfoot,th,thead,tr{border-color:inherit;border-style:solid;border-width:0}label{display:inline-block}button{border-radius:0}button:focus:not(:focus-visible){outline:0}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,select{text-transform:none}[role=button]{cursor:pointer}select{word-wrap:normal}select:disabled{opacity:1}[list]::-webkit-calendar-picker-indicator{display:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled){cursor:pointer}::-moz-focus-inner{padding:0;border-style:none}textarea{resize:vertical}fieldset{min-width:0;padding:0;margin:0;border:0}legend{float:left;width:100%;padding:0;margin-bottom:.5rem;font-size:calc(1.275rem + .3vw);line-height:inherit}@media (min-width:1200px){legend{font-size:1.5rem}}legend+*{clear:left}::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-fields-wrapper,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-text,::-webkit-datetime-edit-year-field{padding:0}::-webkit-inner-spin-button{height:auto}[type=search]{outline-offset:-2px;-webkit-appearance:textfield}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-color-swatch-wrapper{padding:0}::file-selector-button{font:inherit}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}output{display:inline-block}iframe{border:0}summary{display:list-item;cursor:pointer}progress{vertical-align:baseline}[hidden]{display:none!important}</style>
@@ -33,22 +33,19 @@
         <h2>API Documentation</h2>
             <ul class="memberlist">
             <li>
-                    <a class="function" href="#grouped">grouped</a>
-            </li>
-            <li>
-                    <a class="function" href="#flatten">flatten</a>
-            </li>
-            <li>
-                    <a class="function" href="#save_object">save_object</a>
-            </li>
-            <li>
-                    <a class="function" href="#read_object">read_object</a>
-            </li>
-            <li>
-                    <a class="function" href="#timing">timing</a>
-            </li>
-            <li>
-                    <a class="function" href="#print_memory_usage">print_memory_usage</a>
+                    <a class="class" href="#HNX_Hypergraph">HNX_Hypergraph</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#HNX_Hypergraph.__init__">HNX_Hypergraph</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#HNX_Hypergraph.draw">draw</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#HNX_Hypergraph.draw_collapse_nodes">draw_collapse_nodes</a>
+                        </li>
+                </ul>
+
             </li>
     </ul>
 
@@ -65,309 +62,225 @@
     <main class="pdoc">
             <section class="module-info">
                     <h1 class="modulename">
-<a href="./../hypper.html">hypper</a><wbr>.utils    </h1>
+<a href="./../hypper.html">hypper</a><wbr>.plotting    </h1>
 
                 
-                        <input id="utils-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                        <input id="plotting-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
-                        <label class="view-source-button" for="utils-view-source"><span>View Source</span></label>
+                        <label class="view-source-button" for="plotting-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">import</span> <span class="nn">os</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">import</span> <span class="nn">pickle</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">import</span> <span class="nn">psutil</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">import</span> <span class="nn">logging</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="n">BASE_LOGGING_LEVEL</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="k">def</span> <span class="nf">grouped</span><span class="p">(</span><span class="n">iterable</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="sd">&quot;&quot;&quot;Groups subsequent values according to the formula: `(s0,s1,s2,...sn-1), (sn,sn+1,sn+2,...s2n-1), (s2n,s2n+1,s2n+2,...s3n-1), ...`</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">    Args:</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">        iterable (list): List of objects.</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">        n (int): Number of elements in group.</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="k">return</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)]</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="sd">&quot;&quot;&quot;Returns flattened list.</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">    Args:</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">        x (list): Nested Python list.</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    Returns:</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">        list: Flattened Python list.</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">sl</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sl</span><span class="p">]</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="k">def</span> <span class="nf">save_object</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="sd">&quot;&quot;&quot;Saves object in Pickle format.</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">    Args:</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">        obj : Python object to save.</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">        filename (str): Save path.</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="k">def</span> <span class="nf">read_object</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="sd">&quot;&quot;&quot;Reads object from pickle format.</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">    Args:</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        filename (str): Reading path.</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="k">def</span> <span class="nf">timing</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="sd">&quot;&quot;&quot;Decorator that measure s execution time of a selected function.</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">    Args:</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">        f (Callable): Function.</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">    Returns:</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">        Tuple[Any, float]: Returns tuple with original function output and the time in seconds as a floating point number.</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>        <span class="n">ts</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>        <span class="n">te</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="n">te</span> <span class="o">-</span> <span class="n">ts</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    <span class="k">return</span> <span class="n">wrapper</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="k">def</span> <span class="nf">print_memory_usage</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>    <span class="sd">&quot;&quot;&quot;Function shows actual RAM usage.&quot;&quot;&quot;</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>    <span class="nb">print</span><span class="p">(</span><span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span><span class="o">.</span><span class="n">memory_info</span><span class="p">()</span><span class="o">.</span><span class="n">rss</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span> <span class="nn">.plot</span> <span class="kn">import</span> <span class="n">HNX_Hypergraph</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;HNX_Hypergraph&quot;</span><span class="p">]</span>
 </span></pre></div>
 
 
             </section>
-                <section id="grouped">
-                            <input id="grouped-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
+                <section id="HNX_Hypergraph">
+                            <input id="HNX_Hypergraph-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
             
-        <span class="def">def</span>
-        <span class="name">grouped</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">iterable</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>, </span><span class="param"><span class="n">n</span><span class="p">:</span> <span class="nb">int</span></span>)</span>
+    <span class="def">class</span>
+    <span class="name">HNX_Hypergraph</span><wbr>(<span class="base">hypernetx.classes.hypergraph.Hypergraph</span>):
 
-                <label class="view-source-button" for="grouped-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="HNX_Hypergraph-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#grouped"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="grouped-15"><a href="#grouped-15"><span class="linenos">15</span></a><span class="k">def</span> <span class="nf">grouped</span><span class="p">(</span><span class="n">iterable</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-</span><span id="grouped-16"><a href="#grouped-16"><span class="linenos">16</span></a>    <span class="sd">&quot;&quot;&quot;Groups subsequent values according to the formula: `(s0,s1,s2,...sn-1), (sn,sn+1,sn+2,...s2n-1), (s2n,s2n+1,s2n+2,...s3n-1), ...`</span>
-</span><span id="grouped-17"><a href="#grouped-17"><span class="linenos">17</span></a>
-</span><span id="grouped-18"><a href="#grouped-18"><span class="linenos">18</span></a><span class="sd">    Args:</span>
-</span><span id="grouped-19"><a href="#grouped-19"><span class="linenos">19</span></a><span class="sd">        iterable (list): List of objects.</span>
-</span><span id="grouped-20"><a href="#grouped-20"><span class="linenos">20</span></a><span class="sd">        n (int): Number of elements in group.</span>
-</span><span id="grouped-21"><a href="#grouped-21"><span class="linenos">21</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="grouped-22"><a href="#grouped-22"><span class="linenos">22</span></a>    <span class="k">return</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)]</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+    <a class="headerlink" href="#HNX_Hypergraph"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="HNX_Hypergraph-9"><a href="#HNX_Hypergraph-9"><span class="linenos"> 9</span></a><span class="k">class</span> <span class="nc">HNX_Hypergraph</span><span class="p">(</span><span class="n">hypernetx</span><span class="o">.</span><span class="n">Hypergraph</span><span class="p">):</span>
+</span><span id="HNX_Hypergraph-10"><a href="#HNX_Hypergraph-10"><span class="linenos">10</span></a>    <span class="sd">&quot;&quot;&quot;Hypper wrapper for HyperNetX hypergraph representation.</span>
+</span><span id="HNX_Hypergraph-11"><a href="#HNX_Hypergraph-11"><span class="linenos">11</span></a>
+</span><span id="HNX_Hypergraph-12"><a href="#HNX_Hypergraph-12"><span class="linenos">12</span></a><span class="sd">    Hypper hypergraph representation can be visualized thanks to HyperNetX library (**https://github.com/pnnl/HyperNetX**).</span>
+</span><span id="HNX_Hypergraph-13"><a href="#HNX_Hypergraph-13"><span class="linenos">13</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="HNX_Hypergraph-14"><a href="#HNX_Hypergraph-14"><span class="linenos">14</span></a>
+</span><span id="HNX_Hypergraph-15"><a href="#HNX_Hypergraph-15"><span class="linenos">15</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hg</span><span class="p">:</span> <span class="n">HyperGraph</span><span class="p">,</span> <span class="n">include_label</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="HNX_Hypergraph-16"><a href="#HNX_Hypergraph-16"><span class="linenos">16</span></a>        <span class="sd">&quot;&quot;&quot;Creates hypergraph representation with HyperNetX library.</span>
+</span><span id="HNX_Hypergraph-17"><a href="#HNX_Hypergraph-17"><span class="linenos">17</span></a><span class="sd">        Args:</span>
+</span><span id="HNX_Hypergraph-18"><a href="#HNX_Hypergraph-18"><span class="linenos">18</span></a><span class="sd">            hg (hypper.hypergraph.HyperGraph): Hypper HyperGraph object.</span>
+</span><span id="HNX_Hypergraph-19"><a href="#HNX_Hypergraph-19"><span class="linenos">19</span></a><span class="sd">            include_label: `True` if label should be visible as one of the hyperedges. Defaults to `False`.</span>
+</span><span id="HNX_Hypergraph-20"><a href="#HNX_Hypergraph-20"><span class="linenos">20</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="HNX_Hypergraph-21"><a href="#HNX_Hypergraph-21"><span class="linenos">21</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">include_label</span> <span class="o">=</span> <span class="n">include_label</span>
+</span><span id="HNX_Hypergraph-22"><a href="#HNX_Hypergraph-22"><span class="linenos">22</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prepare_structure</span><span class="p">(</span><span class="n">hg</span><span class="p">))</span>
+</span><span id="HNX_Hypergraph-23"><a href="#HNX_Hypergraph-23"><span class="linenos">23</span></a>
+</span><span id="HNX_Hypergraph-24"><a href="#HNX_Hypergraph-24"><span class="linenos">24</span></a>    <span class="k">def</span> <span class="nf">_prepare_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hg</span><span class="p">:</span> <span class="n">HyperGraph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hypernetx</span><span class="o">.</span><span class="n">Hypergraph</span><span class="p">:</span>
+</span><span id="HNX_Hypergraph-25"><a href="#HNX_Hypergraph-25"><span class="linenos">25</span></a>        <span class="n">new_representation</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+</span><span id="HNX_Hypergraph-26"><a href="#HNX_Hypergraph-26"><span class="linenos">26</span></a>        <span class="n">nonzero_idx</span> <span class="o">=</span> <span class="n">hg</span><span class="o">.</span><span class="n">incidence_matrix</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
+</span><span id="HNX_Hypergraph-27"><a href="#HNX_Hypergraph-27"><span class="linenos">27</span></a>        <span class="k">for</span> <span class="n">vertex_idx</span><span class="p">,</span> <span class="n">edge_idx</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">nonzero_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nonzero_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+</span><span id="HNX_Hypergraph-28"><a href="#HNX_Hypergraph-28"><span class="linenos">28</span></a>            <span class="n">new_representation</span><span class="p">[</span><span class="n">hg</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">inverse</span><span class="p">[</span><span class="n">edge_idx</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span><span id="HNX_Hypergraph-29"><a href="#HNX_Hypergraph-29"><span class="linenos">29</span></a>                <span class="n">hg</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">inverse</span><span class="p">[</span><span class="n">vertex_idx</span><span class="p">]</span>
+</span><span id="HNX_Hypergraph-30"><a href="#HNX_Hypergraph-30"><span class="linenos">30</span></a>            <span class="p">)</span>
+</span><span id="HNX_Hypergraph-31"><a href="#HNX_Hypergraph-31"><span class="linenos">31</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">include_label</span><span class="p">:</span>
+</span><span id="HNX_Hypergraph-32"><a href="#HNX_Hypergraph-32"><span class="linenos">32</span></a>            <span class="k">for</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hg</span><span class="o">.</span><span class="n">vertices_weights</span><span class="p">):</span>
+</span><span id="HNX_Hypergraph-33"><a href="#HNX_Hypergraph-33"><span class="linenos">33</span></a>                <span class="n">new_representation</span><span class="p">[</span><span class="n">hg</span><span class="o">.</span><span class="n">edges_labels</span><span class="o">.</span><span class="n">inverse</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">row</span><span class="p">)]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span><span id="HNX_Hypergraph-34"><a href="#HNX_Hypergraph-34"><span class="linenos">34</span></a>                    <span class="n">hg</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">inverse</span><span class="p">[</span><span class="n">row_idx</span><span class="p">]</span>
+</span><span id="HNX_Hypergraph-35"><a href="#HNX_Hypergraph-35"><span class="linenos">35</span></a>                <span class="p">)</span>
+</span><span id="HNX_Hypergraph-36"><a href="#HNX_Hypergraph-36"><span class="linenos">36</span></a>        <span class="k">return</span> <span class="n">new_representation</span>
+</span><span id="HNX_Hypergraph-37"><a href="#HNX_Hypergraph-37"><span class="linenos">37</span></a>
+</span><span id="HNX_Hypergraph-38"><a href="#HNX_Hypergraph-38"><span class="linenos">38</span></a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="HNX_Hypergraph-39"><a href="#HNX_Hypergraph-39"><span class="linenos">39</span></a>        <span class="sd">&quot;&quot;&quot;Method uses hypernetx.draw to plot hypergraph.&quot;&quot;&quot;</span>
+</span><span id="HNX_Hypergraph-40"><a href="#HNX_Hypergraph-40"><span class="linenos">40</span></a>        <span class="n">hypernetx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="HNX_Hypergraph-41"><a href="#HNX_Hypergraph-41"><span class="linenos">41</span></a>
+</span><span id="HNX_Hypergraph-42"><a href="#HNX_Hypergraph-42"><span class="linenos">42</span></a>    <span class="k">def</span> <span class="nf">draw_collapse_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="HNX_Hypergraph-43"><a href="#HNX_Hypergraph-43"><span class="linenos">43</span></a>        <span class="sd">&quot;&quot;&quot;Method uses hypernetx.draw with `collapsed_nodes` parameter to plot hypergraph.&quot;&quot;&quot;</span>
+</span><span id="HNX_Hypergraph-44"><a href="#HNX_Hypergraph-44"><span class="linenos">44</span></a>        <span class="n">hypernetx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collapse_nodes</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Groups subsequent values according to the formula: <code>(s0,s1,s2,...sn-1), (sn,sn+1,sn+2,...s2n-1), (s2n,s2n+1,s2n+2,...s3n-1), ...</code></p>
+            <div class="docstring"><p>Hypper wrapper for HyperNetX hypergraph representation.</p>
+
+<p>Hypper hypergraph representation can be visualized thanks to HyperNetX library (<strong>https://github.com/pnnl/HyperNetX</strong>).</p>
+</div>
+
+
+                            <div id="HNX_Hypergraph.__init__" class="classattr">
+                                        <input id="HNX_Hypergraph.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="name">HNX_Hypergraph</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">hg</span><span class="p">:</span> <span class="n">hypper</span><span class="o">.</span><span class="n">hypergraph</span><span class="o">.</span><span class="n">HyperGraph</span>, </span><span class="param"><span class="n">include_label</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span>)</span>
+
+                <label class="view-source-button" for="HNX_Hypergraph.__init__-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#HNX_Hypergraph.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="HNX_Hypergraph.__init__-15"><a href="#HNX_Hypergraph.__init__-15"><span class="linenos">15</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hg</span><span class="p">:</span> <span class="n">HyperGraph</span><span class="p">,</span> <span class="n">include_label</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="HNX_Hypergraph.__init__-16"><a href="#HNX_Hypergraph.__init__-16"><span class="linenos">16</span></a>        <span class="sd">&quot;&quot;&quot;Creates hypergraph representation with HyperNetX library.</span>
+</span><span id="HNX_Hypergraph.__init__-17"><a href="#HNX_Hypergraph.__init__-17"><span class="linenos">17</span></a><span class="sd">        Args:</span>
+</span><span id="HNX_Hypergraph.__init__-18"><a href="#HNX_Hypergraph.__init__-18"><span class="linenos">18</span></a><span class="sd">            hg (hypper.hypergraph.HyperGraph): Hypper HyperGraph object.</span>
+</span><span id="HNX_Hypergraph.__init__-19"><a href="#HNX_Hypergraph.__init__-19"><span class="linenos">19</span></a><span class="sd">            include_label: `True` if label should be visible as one of the hyperedges. Defaults to `False`.</span>
+</span><span id="HNX_Hypergraph.__init__-20"><a href="#HNX_Hypergraph.__init__-20"><span class="linenos">20</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="HNX_Hypergraph.__init__-21"><a href="#HNX_Hypergraph.__init__-21"><span class="linenos">21</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">include_label</span> <span class="o">=</span> <span class="n">include_label</span>
+</span><span id="HNX_Hypergraph.__init__-22"><a href="#HNX_Hypergraph.__init__-22"><span class="linenos">22</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prepare_structure</span><span class="p">(</span><span class="n">hg</span><span class="p">))</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Creates hypergraph representation with HyperNetX library.</p>
 
 <h6 id="args">Args</h6>
 
 <ul>
-<li><strong>iterable (list):</strong>  List of objects.</li>
-<li><strong>n (int):</strong>  Number of elements in group.</li>
+<li><strong>hg (<a href="hypergraph.html#HyperGraph">hypper.hypergraph.HyperGraph</a>):</strong>  Hypper HyperGraph object.</li>
+<li><strong>include_label:</strong>  <code>True</code> if label should be visible as one of the hyperedges. Defaults to <code>False</code>.</li>
 </ul>
 </div>
 
 
-                </section>
-                <section id="flatten">
-                            <input id="flatten-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            </div>
+                            <div id="HNX_Hypergraph.draw" class="classattr">
+                                        <input id="HNX_Hypergraph.draw-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">flatten</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>:</span></span>
+        <span class="name">draw</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
 
-                <label class="view-source-button" for="flatten-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="HNX_Hypergraph.draw-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#flatten"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="flatten-25"><a href="#flatten-25"><span class="linenos">25</span></a><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-</span><span id="flatten-26"><a href="#flatten-26"><span class="linenos">26</span></a>    <span class="sd">&quot;&quot;&quot;Returns flattened list.</span>
-</span><span id="flatten-27"><a href="#flatten-27"><span class="linenos">27</span></a>
-</span><span id="flatten-28"><a href="#flatten-28"><span class="linenos">28</span></a><span class="sd">    Args:</span>
-</span><span id="flatten-29"><a href="#flatten-29"><span class="linenos">29</span></a><span class="sd">        x (list): Nested Python list.</span>
-</span><span id="flatten-30"><a href="#flatten-30"><span class="linenos">30</span></a>
-</span><span id="flatten-31"><a href="#flatten-31"><span class="linenos">31</span></a><span class="sd">    Returns:</span>
-</span><span id="flatten-32"><a href="#flatten-32"><span class="linenos">32</span></a><span class="sd">        list: Flattened Python list.</span>
-</span><span id="flatten-33"><a href="#flatten-33"><span class="linenos">33</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="flatten-34"><a href="#flatten-34"><span class="linenos">34</span></a>    <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">sl</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sl</span><span class="p">]</span>
+    <a class="headerlink" href="#HNX_Hypergraph.draw"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="HNX_Hypergraph.draw-38"><a href="#HNX_Hypergraph.draw-38"><span class="linenos">38</span></a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="HNX_Hypergraph.draw-39"><a href="#HNX_Hypergraph.draw-39"><span class="linenos">39</span></a>        <span class="sd">&quot;&quot;&quot;Method uses hypernetx.draw to plot hypergraph.&quot;&quot;&quot;</span>
+</span><span id="HNX_Hypergraph.draw-40"><a href="#HNX_Hypergraph.draw-40"><span class="linenos">40</span></a>        <span class="n">hypernetx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Returns flattened list.</p>
-
-<h6 id="args">Args</h6>
-
-<ul>
-<li><strong>x (list):</strong>  Nested Python list.</li>
-</ul>
-
-<h6 id="returns">Returns</h6>
-
-<blockquote>
-  <p>list: Flattened Python list.</p>
-</blockquote>
+            <div class="docstring"><p>Method uses hypernetx.draw to plot hypergraph.</p>
 </div>
 
 
-                </section>
-                <section id="save_object">
-                            <input id="save_object-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            </div>
+                            <div id="HNX_Hypergraph.draw_collapse_nodes" class="classattr">
+                                        <input id="HNX_Hypergraph.draw_collapse_nodes-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">save_object</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span>, </span><span class="param"><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
+        <span class="name">draw_collapse_nodes</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
 
-                <label class="view-source-button" for="save_object-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="HNX_Hypergraph.draw_collapse_nodes-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#save_object"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="save_object-37"><a href="#save_object-37"><span class="linenos">37</span></a><span class="k">def</span> <span class="nf">save_object</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="save_object-38"><a href="#save_object-38"><span class="linenos">38</span></a>    <span class="sd">&quot;&quot;&quot;Saves object in Pickle format.</span>
-</span><span id="save_object-39"><a href="#save_object-39"><span class="linenos">39</span></a>
-</span><span id="save_object-40"><a href="#save_object-40"><span class="linenos">40</span></a><span class="sd">    Args:</span>
-</span><span id="save_object-41"><a href="#save_object-41"><span class="linenos">41</span></a><span class="sd">        obj : Python object to save.</span>
-</span><span id="save_object-42"><a href="#save_object-42"><span class="linenos">42</span></a><span class="sd">        filename (str): Save path.</span>
-</span><span id="save_object-43"><a href="#save_object-43"><span class="linenos">43</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="save_object-44"><a href="#save_object-44"><span class="linenos">44</span></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
-</span><span id="save_object-45"><a href="#save_object-45"><span class="linenos">45</span></a>        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>
+    <a class="headerlink" href="#HNX_Hypergraph.draw_collapse_nodes"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="HNX_Hypergraph.draw_collapse_nodes-42"><a href="#HNX_Hypergraph.draw_collapse_nodes-42"><span class="linenos">42</span></a>    <span class="k">def</span> <span class="nf">draw_collapse_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="HNX_Hypergraph.draw_collapse_nodes-43"><a href="#HNX_Hypergraph.draw_collapse_nodes-43"><span class="linenos">43</span></a>        <span class="sd">&quot;&quot;&quot;Method uses hypernetx.draw with `collapsed_nodes` parameter to plot hypergraph.&quot;&quot;&quot;</span>
+</span><span id="HNX_Hypergraph.draw_collapse_nodes-44"><a href="#HNX_Hypergraph.draw_collapse_nodes-44"><span class="linenos">44</span></a>        <span class="n">hypernetx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collapse_nodes</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Saves object in Pickle format.</p>
-
-<h6 id="args">Args</h6>
-
-<ul>
-<li><strong>obj :</strong>  Python object to save.</li>
-<li><strong>filename (str):</strong>  Save path.</li>
-</ul>
+            <div class="docstring"><p>Method uses hypernetx.draw with <code>collapsed_nodes</code> parameter to plot hypergraph.</p>
 </div>
 
 
-                </section>
-                <section id="read_object">
-                            <input id="read_object-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">read_object</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="n">Any</span>:</span></span>
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt>hypernetx.classes.hypergraph.Hypergraph</dt>
+                                <dd id="HNX_Hypergraph.edges" class="variable">edges</dd>
+                <dd id="HNX_Hypergraph.nodes" class="variable">nodes</dd>
+                <dd id="HNX_Hypergraph.isstatic" class="variable">isstatic</dd>
+                <dd id="HNX_Hypergraph.incidence_dict" class="variable">incidence_dict</dd>
+                <dd id="HNX_Hypergraph.shape" class="variable">shape</dd>
+                <dd id="HNX_Hypergraph.get_id" class="function">get_id</dd>
+                <dd id="HNX_Hypergraph.get_name" class="function">get_name</dd>
+                <dd id="HNX_Hypergraph.get_linegraph" class="function">get_linegraph</dd>
+                <dd id="HNX_Hypergraph.set_state" class="function">set_state</dd>
+                <dd id="HNX_Hypergraph.save_state" class="function">save_state</dd>
+                <dd id="HNX_Hypergraph.recover_from_state" class="function">recover_from_state</dd>
+                <dd id="HNX_Hypergraph.add_nwhy" class="function">add_nwhy</dd>
+                <dd id="HNX_Hypergraph.edge_size_dist" class="function">edge_size_dist</dd>
+                <dd id="HNX_Hypergraph.convert_to_static" class="function">convert_to_static</dd>
+                <dd id="HNX_Hypergraph.remove_static" class="function">remove_static</dd>
+                <dd id="HNX_Hypergraph.translate" class="function">translate</dd>
+                <dd id="HNX_Hypergraph.s_degree" class="function">s_degree</dd>
+                <dd id="HNX_Hypergraph.degree" class="function">degree</dd>
+                <dd id="HNX_Hypergraph.size" class="function">size</dd>
+                <dd id="HNX_Hypergraph.number_of_nodes" class="function">number_of_nodes</dd>
+                <dd id="HNX_Hypergraph.number_of_edges" class="function">number_of_edges</dd>
+                <dd id="HNX_Hypergraph.order" class="function">order</dd>
+                <dd id="HNX_Hypergraph.dim" class="function">dim</dd>
+                <dd id="HNX_Hypergraph.neighbors" class="function">neighbors</dd>
+                <dd id="HNX_Hypergraph.edge_neighbors" class="function">edge_neighbors</dd>
+                <dd id="HNX_Hypergraph.remove_node" class="function">remove_node</dd>
+                <dd id="HNX_Hypergraph.remove_nodes" class="function">remove_nodes</dd>
+                <dd id="HNX_Hypergraph.add_edge" class="function">add_edge</dd>
+                <dd id="HNX_Hypergraph.add_edges_from" class="function">add_edges_from</dd>
+                <dd id="HNX_Hypergraph.add_node_to_edge" class="function">add_node_to_edge</dd>
+                <dd id="HNX_Hypergraph.remove_edge" class="function">remove_edge</dd>
+                <dd id="HNX_Hypergraph.remove_edges" class="function">remove_edges</dd>
+                <dd id="HNX_Hypergraph.incidence_matrix" class="function">incidence_matrix</dd>
+                <dd id="HNX_Hypergraph.adjacency_matrix" class="function">adjacency_matrix</dd>
+                <dd id="HNX_Hypergraph.edge_adjacency_matrix" class="function">edge_adjacency_matrix</dd>
+                <dd id="HNX_Hypergraph.auxiliary_matrix" class="function">auxiliary_matrix</dd>
+                <dd id="HNX_Hypergraph.bipartite" class="function">bipartite</dd>
+                <dd id="HNX_Hypergraph.dual" class="function">dual</dd>
+                <dd id="HNX_Hypergraph.collapse_edges" class="function">collapse_edges</dd>
+                <dd id="HNX_Hypergraph.collapse_nodes" class="function">collapse_nodes</dd>
+                <dd id="HNX_Hypergraph.collapse_nodes_and_edges" class="function">collapse_nodes_and_edges</dd>
+                <dd id="HNX_Hypergraph.restrict_to_edges" class="function">restrict_to_edges</dd>
+                <dd id="HNX_Hypergraph.restrict_to_nodes" class="function">restrict_to_nodes</dd>
+                <dd id="HNX_Hypergraph.toplexes" class="function">toplexes</dd>
+                <dd id="HNX_Hypergraph.is_connected" class="function">is_connected</dd>
+                <dd id="HNX_Hypergraph.singletons" class="function">singletons</dd>
+                <dd id="HNX_Hypergraph.remove_singletons" class="function">remove_singletons</dd>
+                <dd id="HNX_Hypergraph.s_connected_components" class="function">s_connected_components</dd>
+                <dd id="HNX_Hypergraph.s_component_subgraphs" class="function">s_component_subgraphs</dd>
+                <dd id="HNX_Hypergraph.s_components" class="function">s_components</dd>
+                <dd id="HNX_Hypergraph.connected_components" class="function">connected_components</dd>
+                <dd id="HNX_Hypergraph.connected_component_subgraphs" class="function">connected_component_subgraphs</dd>
+                <dd id="HNX_Hypergraph.components" class="function">components</dd>
+                <dd id="HNX_Hypergraph.component_subgraphs" class="function">component_subgraphs</dd>
+                <dd id="HNX_Hypergraph.node_diameters" class="function">node_diameters</dd>
+                <dd id="HNX_Hypergraph.edge_diameters" class="function">edge_diameters</dd>
+                <dd id="HNX_Hypergraph.diameter" class="function">diameter</dd>
+                <dd id="HNX_Hypergraph.edge_diameter" class="function">edge_diameter</dd>
+                <dd id="HNX_Hypergraph.distance" class="function">distance</dd>
+                <dd id="HNX_Hypergraph.edge_distance" class="function">edge_distance</dd>
+                <dd id="HNX_Hypergraph.dataframe" class="function">dataframe</dd>
+                <dd id="HNX_Hypergraph.from_bipartite" class="function">from_bipartite</dd>
+                <dd id="HNX_Hypergraph.from_numpy_array" class="function">from_numpy_array</dd>
+                <dd id="HNX_Hypergraph.from_dataframe" class="function">from_dataframe</dd>
 
-                <label class="view-source-button" for="read_object-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#read_object"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="read_object-48"><a href="#read_object-48"><span class="linenos">48</span></a><span class="k">def</span> <span class="nf">read_object</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-</span><span id="read_object-49"><a href="#read_object-49"><span class="linenos">49</span></a>    <span class="sd">&quot;&quot;&quot;Reads object from pickle format.</span>
-</span><span id="read_object-50"><a href="#read_object-50"><span class="linenos">50</span></a>
-</span><span id="read_object-51"><a href="#read_object-51"><span class="linenos">51</span></a><span class="sd">    Args:</span>
-</span><span id="read_object-52"><a href="#read_object-52"><span class="linenos">52</span></a><span class="sd">        filename (str): Reading path.</span>
-</span><span id="read_object-53"><a href="#read_object-53"><span class="linenos">53</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="read_object-54"><a href="#read_object-54"><span class="linenos">54</span></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
-</span><span id="read_object-55"><a href="#read_object-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Reads object from pickle format.</p>
-
-<h6 id="args">Args</h6>
-
-<ul>
-<li><strong>filename (str):</strong>  Reading path.</li>
-</ul>
-</div>
-
-
-                </section>
-                <section id="timing">
-                            <input id="timing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">timing</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>:</span></span>
-
-                <label class="view-source-button" for="timing-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#timing"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="timing-58"><a href="#timing-58"><span class="linenos">58</span></a><span class="k">def</span> <span class="nf">timing</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-</span><span id="timing-59"><a href="#timing-59"><span class="linenos">59</span></a>    <span class="sd">&quot;&quot;&quot;Decorator that measure s execution time of a selected function.</span>
-</span><span id="timing-60"><a href="#timing-60"><span class="linenos">60</span></a>
-</span><span id="timing-61"><a href="#timing-61"><span class="linenos">61</span></a><span class="sd">    Args:</span>
-</span><span id="timing-62"><a href="#timing-62"><span class="linenos">62</span></a><span class="sd">        f (Callable): Function.</span>
-</span><span id="timing-63"><a href="#timing-63"><span class="linenos">63</span></a>
-</span><span id="timing-64"><a href="#timing-64"><span class="linenos">64</span></a><span class="sd">    Returns:</span>
-</span><span id="timing-65"><a href="#timing-65"><span class="linenos">65</span></a><span class="sd">        Tuple[Any, float]: Returns tuple with original function output and the time in seconds as a floating point number.</span>
-</span><span id="timing-66"><a href="#timing-66"><span class="linenos">66</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="timing-67"><a href="#timing-67"><span class="linenos">67</span></a>
-</span><span id="timing-68"><a href="#timing-68"><span class="linenos">68</span></a>    <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-</span><span id="timing-69"><a href="#timing-69"><span class="linenos">69</span></a>    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-</span><span id="timing-70"><a href="#timing-70"><span class="linenos">70</span></a>        <span class="n">ts</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
-</span><span id="timing-71"><a href="#timing-71"><span class="linenos">71</span></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-</span><span id="timing-72"><a href="#timing-72"><span class="linenos">72</span></a>        <span class="n">te</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
-</span><span id="timing-73"><a href="#timing-73"><span class="linenos">73</span></a>        <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="n">te</span> <span class="o">-</span> <span class="n">ts</span>
-</span><span id="timing-74"><a href="#timing-74"><span class="linenos">74</span></a>
-</span><span id="timing-75"><a href="#timing-75"><span class="linenos">75</span></a>    <span class="k">return</span> <span class="n">wrapper</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Decorator that measure s execution time of a selected function.</p>
-
-<h6 id="args">Args</h6>
-
-<ul>
-<li><strong>f (Callable):</strong>  Function.</li>
-</ul>
-
-<h6 id="returns">Returns</h6>
-
-<blockquote>
-  <p>Tuple[Any, float]: Returns tuple with original function output and the time in seconds as a floating point number.</p>
-</blockquote>
-</div>
-
-
-                </section>
-                <section id="print_memory_usage">
-                            <input id="print_memory_usage-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">print_memory_usage</span><span class="signature pdoc-code condensed">(<span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
-
-                <label class="view-source-button" for="print_memory_usage-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#print_memory_usage"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="print_memory_usage-78"><a href="#print_memory_usage-78"><span class="linenos">78</span></a><span class="k">def</span> <span class="nf">print_memory_usage</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="print_memory_usage-79"><a href="#print_memory_usage-79"><span class="linenos">79</span></a>    <span class="sd">&quot;&quot;&quot;Function shows actual RAM usage.&quot;&quot;&quot;</span>
-</span><span id="print_memory_usage-80"><a href="#print_memory_usage-80"><span class="linenos">80</span></a>    <span class="nb">print</span><span class="p">(</span><span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span><span class="o">.</span><span class="n">memory_info</span><span class="p">()</span><span class="o">.</span><span class="n">rss</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Function shows actual RAM usage.</p>
-</div>
-
-
+            </div>
+                                </dl>
+                            </div>
                 </section>
     </main>
 <script>
