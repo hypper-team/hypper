@@ -13,6 +13,7 @@ from .utils import BASE_LOGGING_LEVEL
 #  * caching mechanism for hypergraph weighting
 #  * include weights in semi-random walk path selection
 
+ABC = "sa"
 
 class HyperGraph:
     """Hypergraph representation of an input dataset.
