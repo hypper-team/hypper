@@ -39,6 +39,7 @@ setup(
         "psutil>=5.9.0",
         "hypernetx>=1.2.3",
         "requests>=2.23.0",
+        "decorator>=5.1.1"
     ],
     classifiers=[
         "Programming Language :: Python :: 3.7",
@@ -52,7 +53,7 @@ setup(
     long_description_content_type="text/markdown",
     package_data={"hypper": ["logger.conf"]},
     extras_require={
-        "documentation": ["decorator>=5.1.1", "pdoc"],
+        "documentation": ["pdoc"],
         "develop": ["pytest", "black"],
         "benchmarking": [
             "tqdm",
@@ -63,7 +64,6 @@ setup(
             "lightgbm",
         ],
         "all": [
-            "decorator>=5.1.1",
             "pytest",
             "pdoc",
             "black",
