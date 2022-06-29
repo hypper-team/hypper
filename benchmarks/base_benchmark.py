@@ -13,7 +13,7 @@ class BaseBenchmark:
         self,
         param_grid: dict,
         savefile: str,
-        random_seed: int = 42,
+        random_seed: int = 9090,
         verbosity: bool = False,
     ) -> None:
         self.param_grid = ParameterGrid(param_grid)

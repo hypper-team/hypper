@@ -203,9 +203,14 @@ class FeatureSelectionBenchmark(BaseBenchmark):
                             X_val = sparse.csr_matrix(X_val)
                         # Create dataset with selected features
                         ## Train
-                        df_train_selected_cols = pd.DataFrame.sparse.from_spmatrix(
-                            X_train, columns=X_train_columns
-                        )  # When X_test will be modified with OHE data leak occures
+                        try:
+                            df_train_selected_cols = pd.DataFrame.sparse.from_spmatrix(
+                                X_train, columns=X_train_columns
+                            )  # When X_test will be modified with OHE data leak occures
+                        except AttributeError:
+                            df_train_selected_cols = pd.DataFrame(
+                                X_train, columns=X_train_columns
+                            )
                         # (with X_train, otherwise non recognized values occur)
                         n_features = df_fs_results_n_features.index.tolist()
                         # if self.feature_values:

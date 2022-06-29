@@ -99,8 +99,8 @@ class UndersamplingBenchmark(BaseBenchmark):
                 np.random.shuffle(split_test)
                 val_amount = int(0.5 * split_test.shape[0])
                 split_validation, split_test = (
-                    split_test[:val_amount],
                     split_test[val_amount:],
+                    split_test[:val_amount],
                 )
                 X_train, X_test, X_val = (
                     X[split_train],
