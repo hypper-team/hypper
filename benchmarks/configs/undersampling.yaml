@@ -2,7 +2,7 @@ read_functions:
   - read_german_data
   - read_spect_heart
   - read_banking
-  - read_hr
+  # - read_hr
   - read_criteo
 param_grid:
   - method: [hypper]
@@ -17,7 +17,8 @@ param_grid:
     majority_left_threshold: [0.0, 0.25, 0.5]
   # - method: [near_miss]
   #   version: [1, 2]
-savefile: "undersampling_exp_f.csv"
+savefile: "undersampling_exp.csv"
+data_seeds: [9090, 42, 1337]
 verbosity: false
 kfold_splits: 6
 eval_algorithms:
@@ -25,4 +26,4 @@ eval_algorithms:
   # - XGBClassifier
   # - MLPClassifier
   - CatBoostClassifier
-  - LGBMClassifier
+  # - LGBMClassifier

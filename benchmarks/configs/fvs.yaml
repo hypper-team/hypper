@@ -17,12 +17,13 @@ param_grid:
     feature_values: [true]
   - method: [random_forest, logistic_regression, random]
 savefile: "fv_selection_exp.csv"
+data_seeds: [9090, 42, 1337]
 percent_of_features: [0.3, 0.5]
 feature_values: true
 kfold_splits: 3
 eval_algorithms:
-  - LogisticRegression
+  # - LogisticRegression
   # - XGBClassifier
-  - MLPClassifier
+  # - MLPClassifier
   - CatBoostClassifier
   - LGBMClassifier
