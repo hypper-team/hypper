@@ -33,4 +33,31 @@ pytest
 
 ## Citation
 ```
+@ARTICLE{Misiorek2022-ru,
+  title     = "Hypergraph-based importance assessment for binary classification
+               data",
+  author    = "Misiorek, Pawel and Janowski, Szymon",
+  abstract  = "AbstractWe present a novel hypergraph-based framework enabling
+               an assessment of the importance of binary classification data
+               elements. Specifically, we apply the hypergraph model to rate
+               data samples' and categorical feature values' relevance to
+               classification labels. The proposed Hypergraph-based Importance
+               ratings are theoretically grounded on the hypergraph cut
+               conductance minimization concept. As a result of using
+               hypergraph representation, which is a lossless representation
+               from the perspective of higher-order relationships in data, our
+               approach allows for more precise exploitation of the information
+               on feature and sample coincidences. The solution was tested
+               using two scenarios: undersampling for imbalanced classification
+               data and feature selection. The experimentation results have
+               proven the good quality of the new approach when compared with
+               other state-of-the-art and baseline methods for both scenarios
+               measured using the average precision evaluation metric.",
+  journal   = "Knowl. Inf. Syst.",
+  publisher = "Springer Science and Business Media LLC",
+  month     =  dec,
+  year      =  2022,
+  copyright = "https://creativecommons.org/licenses/by/4.0",
+  language  = "en"
+}
 ```
